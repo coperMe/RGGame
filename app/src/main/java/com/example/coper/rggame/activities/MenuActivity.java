@@ -1,11 +1,15 @@
 package com.example.coper.rggame.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.coper.rggame.R;
+
+/**
+ * @author David García Molino
+ */
 
 public class MenuActivity extends AppCompatActivity {
 

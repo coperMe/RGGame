@@ -1,18 +1,20 @@
 package com.example.coper.rggame.activities;
 
-import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TabHost;
 
 import com.example.coper.rggame.POJO.RecAdapter;
-import com.example.coper.rggame.POJO.Scores;
 import com.example.coper.rggame.POJO.Scoring;
 import com.example.coper.rggame.R;
 
 import java.util.Vector;
+
+/**
+ * @author David García Molino
+ */
 
 public class ScoresActivity extends AppCompatActivity {
 

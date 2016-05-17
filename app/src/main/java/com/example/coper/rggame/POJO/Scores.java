@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import com.example.coper.rggame.R;
 
 /**
- * Created by coper on 16/05/16.
+ * @author David García Molino
  */
+
 public class Scores extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

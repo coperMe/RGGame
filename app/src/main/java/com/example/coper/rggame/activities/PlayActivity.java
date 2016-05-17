@@ -1,12 +1,17 @@
 package com.example.coper.rggame.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.coper.rggame.POJO.Riddle;
 import com.example.coper.rggame.R;
 
+import java.util.Arrays;
 import java.util.Vector;
+
+/**
+ * @author David García Molino
+ */
 
 public class PlayActivity extends AppCompatActivity {
 
@@ -16,9 +21,28 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+
     }
 
-    public Vector<Riddle> generateRiddleList(){
+
+    public Vector<Riddle> generateRiddleVector(){
+        /*
+        / The first implementation of this method stored hardcoded all the riddles in a Vector of
+        / riddles. Final implementation will recover the indexes stored at the String array from
+        / a sqlite database, holder of the riddles.
+        */
+        String []indexes;
+        int position = 0;
+        indexes = new String[8];
+
+        while (position < indexes.length){
+            Double random = Math.floor(Math.random())%14;
+            if(!Arrays.asList(indexes).contains(random)) {
+                indexes[position] = Integer.toString(random.intValue()+1);
+                position++;
+            }
+        }
 
         riddleList = new Vector<Riddle>();
         Riddle rid = null;

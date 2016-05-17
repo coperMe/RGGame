@@ -1,7 +1,7 @@
 package com.example.coper.rggame.POJO;
 
 /**
- * Created by coper on 16/05/16.
+ * @author David García Molino
  */
 public class Riddle {
     private int number;

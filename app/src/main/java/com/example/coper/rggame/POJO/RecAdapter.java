@@ -11,7 +11,7 @@ import com.example.coper.rggame.R;
 import java.util.Vector;
 
 /**
- * Created by David García Molino on 14/05/16.
+ * @author David García Molino
  */
 public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
 

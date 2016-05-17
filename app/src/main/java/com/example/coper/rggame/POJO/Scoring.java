@@ -1,8 +1,9 @@
 package com.example.coper.rggame.POJO;
 
 /**
- * Created by coper on 16/05/16.
+ * @author David García Molino
  */
+
 public class Scoring {
     private User user;
     private int score;

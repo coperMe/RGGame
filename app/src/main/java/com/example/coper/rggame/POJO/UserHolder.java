@@ -9,8 +9,9 @@ import android.widget.TextView;
 import com.example.coper.rggame.R;
 
 /**
- * Created by David García Molino on 14/05/16.
+ * @author David García Molino
  */
+
 public class UserHolder extends RecyclerView.ViewHolder {
 
     private ImageView profilePic;

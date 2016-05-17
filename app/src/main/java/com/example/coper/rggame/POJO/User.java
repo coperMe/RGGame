@@ -1,13 +1,13 @@
 package com.example.coper.rggame.POJO;
 
-import android.media.Image;
 import android.net.Uri;
 
 import java.util.ArrayList;
 
 /**
- * Created by David García Molino on 14/05/16.
+ * @author David García Molino
  */
+
 public class User {
 
     private Uri profilePic;
