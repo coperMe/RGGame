@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#88A719</color>
+    <color name="colorAccent">#1DDE1D</color>
     <!--'#FF4081'-->
 
-    <color name="riddlerPurple">#7D1369</color>
-    <color name="riddlerGreen">#88A719</color>
+    <color name="riddlerPurple">#CB1ABC</color>
+    <color name="riddlerGreen">#1DDE1D</color>
 </resources>

@@ -21,8 +21,6 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-
-
     }
 
 
@@ -30,7 +28,7 @@ public class PlayActivity extends AppCompatActivity {
         /*
         / The first implementation of this method stored hardcoded all the riddles in a Vector of
         / riddles. Final implementation will recover the indexes stored at the String array from
-        / a sqlite database, holder of the riddles.
+        / a sqlite database, storage of the riddles.
         */
         String []indexes;
         int position = 0;
@@ -110,6 +108,28 @@ public class PlayActivity extends AppCompatActivity {
                                 "I'll be gone. What am I?",
                         "A secret");
         riddleList.add(rid);
+        rid = new Riddle( 15,
+                        "I'll be right under your feet in the midday sun; you cannot leave me," +
+                                "no matter how fast you run",
+                        "Shadow");
+        riddleList.add(rid);
+        rid = new Riddle( 16,
+                        "The more there is, the less you see. What could I be?",
+                        "Darkness");
+        riddleList.add(rid);
+        rid = new Riddle( 17,
+                        "Hit me hard and I will crack but you'll never stop me from staring back." +
+                                "What am I?",
+                        "Mirror");
+        riddleList.add(rid);
+
+        while (position < indexes.length){
+            Double random = Math.floor(Math.random())%riddleList.size();
+            if(!Arrays.asList(indexes).contains(random)) {
+                indexes[position] = Integer.toString(random.intValue()+1);
+                position++;
+            }
+        }
 
         return riddleList;
     }

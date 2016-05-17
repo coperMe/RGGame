@@ -78,11 +78,24 @@
         android:layout_below="@+id/tvFriendList"
         android:layout_centerHorizontal="true"
         android:background="@color/riddlerPurple"
-        android:alpha="0.5">
+        android:alpha="0.5"
+        android:id="@+id/frameLayout">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rvFriendsList">
         </android.support.v7.widget.RecyclerView>
     </FrameLayout>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/bAddFriend"
+        android:background="@android:color/black"
+        android:textColor="@color/riddlerGreen"
+        android:layout_below="@id/sDifficultySpinner"
+        android:layout_alignBottom="@+id/tvFriendList"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

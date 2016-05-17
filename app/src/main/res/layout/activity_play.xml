@@ -16,7 +16,7 @@
         android:id="@+id/riddlerSymbol"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/riddler_questionMark" />
+        android:src="@drawable/question_mark" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
         style="?android:attr/progressBarStyleHorizontal"
