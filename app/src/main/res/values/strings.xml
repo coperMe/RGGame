@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Resquizz Gotham</string>
+
+    <string name="bPlay">Play</string>
+    <string name="bScores">Score</string>
+    <string name="bSettings">Settings</string>
+
+    <string name="tvName">Name:</string>
+    <string name="etName">Introduce your name here</string>
+    <string name="tvDifficulty">Difficulty:</string>
+    <string name="tvFriendList">Friends list:</string>
+</resources>
