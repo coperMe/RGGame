@@ -25,14 +25,15 @@ public class PlayActivity extends AppCompatActivity {
 
 
     public Vector<Riddle> generateRiddleVector(){
-        /*
+        /**
         / The first implementation of this method stored hardcoded all the riddles in a Vector of
         / riddles. Final implementation will recover the indexes stored at the String array from
         / a sqlite database, storage of the riddles.
+        / A game consists in 10 riddles with a bonus for each riddle in a row
         */
         String []indexes;
         int position = 0;
-        indexes = new String[8];
+        indexes = new String[10];
 
         while (position < indexes.length){
             Double random = Math.floor(Math.random())%14;

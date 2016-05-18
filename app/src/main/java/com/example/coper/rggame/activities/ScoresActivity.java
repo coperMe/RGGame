@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TabHost;
 
-import com.example.coper.rggame.POJO.RecAdapter;
 import com.example.coper.rggame.POJO.Scoring;
 import com.example.coper.rggame.R;
+import com.example.coper.rggame.tools.RecAdapter;
 
 import java.util.Vector;
 

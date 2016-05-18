@@ -9,4 +9,5 @@
     <string name="etName">Introduce your name here</string>
     <string name="tvDifficulty">Difficulty:</string>
     <string name="tvFriendList">Friends list:</string>
+    <string name="bAddFriend">Add friend</string>
 </resources>

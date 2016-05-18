@@ -37,4 +37,10 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intention);
     }
 
+    public void onClickSettingsButton(View v){
+
+        startActivity(new Intent(this, SettingsActivity.class));
+
+    }
+
 }

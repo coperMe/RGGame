@@ -10,7 +10,7 @@
     android:background="@android:color/black"
     tools:context=".activities.PlayActivity">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/riddlerSymbol"

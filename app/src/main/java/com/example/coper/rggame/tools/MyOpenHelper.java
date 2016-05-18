@@ -1,4 +1,4 @@
-package com.example.coper.rggame.POJO;
+package com.example.coper.rggame.tools;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

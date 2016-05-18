@@ -10,7 +10,7 @@
     android:background="@android:color/black"
     tools:context=".activities.SettingsActivity">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -20,7 +20,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivUserImage"
+        android:maxHeight="60dp"
+        android:maxWidth="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tvName"
+        android:layout_alignBottom="@+id/etName" />
+
+    <android.support.v7.widget.AppCompatEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -34,7 +44,7 @@
 
 
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -45,7 +55,7 @@
         android:layout_below="@+id/etName"
         android:layout_alignParentStart="true" />
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sDifficultySpinner"
@@ -55,14 +65,7 @@
         android:layout_alignBottom="@+id/tvDifficulty"
         android:entries="@array/spinnerArray" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -72,7 +75,20 @@
         android:layout_below="@+id/tvDifficulty"
         android:layout_alignParentStart="true" />
 
-    <FrameLayout
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bAddFriend"
+        android:id="@+id/bAddFriend"
+        android:background="@android:color/black"
+        android:textColor="@color/riddlerGreen"
+        android:layout_below="@id/sDifficultySpinner"
+        android:layout_alignBottom="@+id/tvFriendList"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClickAddFriendButton"/>
+
+    <android.support.v7.widget.ContentFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tvFriendList"
@@ -85,17 +101,6 @@
             android:layout_height="match_parent"
             android:id="@+id/rvFriendsList">
         </android.support.v7.widget.RecyclerView>
-    </FrameLayout>
+    </android.support.v7.widget.ContentFrameLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/bAddFriend"
-        android:background="@android:color/black"
-        android:textColor="@color/riddlerGreen"
-        android:layout_below="@id/sDifficultySpinner"
-        android:layout_alignBottom="@+id/tvFriendList"
-        android:layout_alignParentEnd="true" />
 </RelativeLayout>
