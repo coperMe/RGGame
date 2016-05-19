@@ -7,24 +7,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/black"
-    tools:context=".activities.PlayActivity">
+    tools:context=".activities.LoadingActivity">
 
-    <android.support.v7.widget.AppCompatTextView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tvRiddle"
-        android:textColor="@color/riddlerPurple"
+        android:id="@+id/riddlerSymbol"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/question_mark" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <android.support.v4.widget.ContentLoadingProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/etAnswer"
-        android:textColor="@color/riddlerGreen"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/riddleLoader"
+        android:layout_below="@+id/riddlerSymbol"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

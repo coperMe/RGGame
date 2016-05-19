@@ -16,10 +16,12 @@ import java.util.Vector;
  */
 public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
 
+    private Context context;
     private LayoutInflater inflater;
     protected Vector<Scoring> highScores;
 
     public RecAdapter(Context contexto, Vector<Scoring> highScores) {
+        this.context = contexto;
         inflater = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.highScores = highScores;
     }
@@ -27,7 +29,7 @@ public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
     @Override
     public UserHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = inflater.inflate(R.layout.score_row, null);
+        View v = inflater.inflate(R.layout.score_row, parent);
         return new UserHolder(v);
 
     }

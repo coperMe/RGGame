@@ -17,14 +17,14 @@
         </activity>
         <activity
             android:name=".activities.PlayActivity"
-            android:parentActivityName=".activities.MenuActivity"></activity>
+            android:parentActivityName=".activities.MenuActivity" />
         <activity
             android:name=".activities.ScoresActivity"
-            android:parentActivityName=".activities.MenuActivity"></activity>
+            android:parentActivityName=".activities.MenuActivity" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:parentActivityName=".activities.MenuActivity">
-        </activity>
+            android:parentActivityName=".activities.MenuActivity"></activity>
+        <activity android:name=".activities.LoadingActivity"></activity>
     </application>
 
 </manifest>
