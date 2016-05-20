@@ -39,4 +39,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/acumulatedScore"
+        android:textStyle="normal"
+        android:textColor="@color/riddlerPurple"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

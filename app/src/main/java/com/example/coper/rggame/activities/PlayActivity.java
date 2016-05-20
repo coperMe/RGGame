@@ -24,24 +24,29 @@ public class PlayActivity extends AppCompatActivity {
 
     private Vector<Riddle> riddleList = null;
     private String[] indexes;
-    private int currentRiddle;
+    private int currentRiddle, acumulatedScore, bonusStreak;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        this.indexes = new String[10];
+        this.riddleList = new Vector<>();
 
         this.setupAnswerField();
         this.fillRiddleVector();
 
         if(savedInstanceState == null) {
-            this.indexes = new String[10];
-            this.riddleList = new Vector<>();
             this.initIndexesArray();
+
             this.currentRiddle = Integer.valueOf(indexes[0]);
+            this.acumulatedScore = 0;
+            this.bonusStreak = 0;
         }else{
             this.currentRiddle = savedInstanceState.getInt("current");
-
+            this.bonusStreak = savedInstanceState.getInt("bonus");
+            this.acumulatedScore = savedInstanceState .getInt("score");
         }
 
         this.playGame();
@@ -54,6 +59,8 @@ public class PlayActivity extends AppCompatActivity {
         Bundle tempSave = new Bundle();
 
         tempSave.putInt("current", this.currentRiddle);
+        tempSave.putInt("bonus", this.bonusStreak);
+        tempSave.putInt("score", this.acumulatedScore);
     }
 
     private void initIndexesArray() {
@@ -113,9 +120,11 @@ public class PlayActivity extends AppCompatActivity {
 
     private void drawScreen() {
         TextView riddle = (TextView) findViewById(R.id.tvRiddle);
+        TextView score = (TextView) findViewById(R.id.acumulatedScore);
         EditText answer = (EditText) findViewById(R.id.etAnswer);
 
-        if(riddle != null && answer != null) {
+        if(riddle != null && answer != null && score != null) {
+            score.setText(String.valueOf(this.acumulatedScore));
             riddle.setText(this.riddleList.get(this.currentRiddle).getRiddle());
             answer.setText("");
         }
@@ -235,13 +244,18 @@ public class PlayActivity extends AppCompatActivity {
         EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 
         if (this.checkAnswer()) {
+            this.acumulatedScore += 25 + 25*bonusStreak;
+            this.bonusStreak++;
+
             this.currentRiddle++;
             if (this.currentRiddle < this.riddleList.size())
                 this.drawScreen();
             else
                 endGame();
-        } else if(etAnswer!=null)
+        } else if(etAnswer!=null) {
+            this.bonusStreak = 0;
             etAnswer.setError("So... You are not as brilliant as you thought, huh?");
+        }
     }
 
     private void endGame() {
