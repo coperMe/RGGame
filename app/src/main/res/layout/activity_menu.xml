@@ -17,6 +17,7 @@
         android:id="@+id/playButton"
         android:textColor="@color/riddlerGreen"
         android:background="@android:color/black"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:onClick="onClickMenuButton"/>
@@ -27,6 +28,7 @@
         android:text="@string/bScores"
         android:id="@+id/scoresButton"
         android:textColor="@color/riddlerGreen"
+        android:textStyle="bold"
         android:background="@android:color/black"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
@@ -39,6 +41,7 @@
         android:id="@+id/settingsButton"
         android:textColor="@color/riddlerGreen"
         android:background="@android:color/black"
+        android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:onClick="onClickMenuButton"/>

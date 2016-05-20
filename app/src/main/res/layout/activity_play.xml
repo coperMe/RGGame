@@ -16,6 +16,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/tvRiddle"
         android:textColor="@color/riddlerPurple"
+        android:clickable="false"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -32,7 +33,9 @@
         android:layout_height="wrap_content"
         android:text="@string/bSolveRiddle"
         android:id="@+id/bSolve"
+        android:background="@color/riddlerGreen"
         android:onClick="onClickSolveButton"
+        android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 

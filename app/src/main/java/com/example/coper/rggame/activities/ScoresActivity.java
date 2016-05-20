@@ -27,22 +27,24 @@ public class ScoresActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scores);
 
-        tabs = (TabHost) findViewById(R.id.tabHost);
-        tabs.setup();
+        if(savedInstanceState == null) {
+            tabs = (TabHost) findViewById(R.id.tabHost);
+            if (tabs != null) {
+                tabs.setup();
 
-        tabs.addTab(tabs.newTabSpec("tabLocal").setIndicator("Local highscores").setContent(R.id.rvLocalScores));
-        tabs.addTab(tabs.newTabSpec("tabFriends").setIndicator("Friends highscores").setContent(R.id.rvFriendsScores));
+                tabs.addTab(tabs.newTabSpec("tabLocal").setIndicator("Local highscores").setContent(R.id.rvLocalScores));
+                tabs.addTab(tabs.newTabSpec("tabFriends").setIndicator("Friends highscores").setContent(R.id.rvFriendsScores));
 
-        lManagerLocal = new LinearLayoutManager(this);
-        recyclerLocal = (RecyclerView) findViewById(R.id.rvLocalScores);
-        recyclerLocal.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
-        recyclerLocal.setLayoutManager(lManagerLocal);
+                lManagerLocal = new LinearLayoutManager(this);
+                recyclerLocal = (RecyclerView) findViewById(R.id.rvLocalScores);
+                recyclerLocal.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
+                recyclerLocal.setLayoutManager(lManagerLocal);
 
-        lManagerFriends = new LinearLayoutManager(this);
-        recyclerFriends = (RecyclerView) findViewById(R.id.rvFriendsScores);
-        recyclerFriends.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
-        recyclerFriends.setLayoutManager(lManagerFriends);
+                lManagerFriends = new LinearLayoutManager(this);
+                recyclerFriends = (RecyclerView) findViewById(R.id.rvFriendsScores);
+                recyclerFriends.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
+                recyclerFriends.setLayoutManager(lManagerFriends);
+            }
+        }
     }
-
-
 }

@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.example.coper.rggame.POJO.Difficulty;
 import com.example.coper.rggame.POJO.Scoring;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.RecAdapter;
@@ -28,8 +31,38 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         recView = (RecyclerView) findViewById(R.id.rvFriendsList);
-        recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
-        recView.setLayoutManager(new LinearLayoutManager(this));
+
+        Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
+
+        if(savedInstanceState == null){
+            if(difficulty != null)
+                difficulty.setSelection(Difficulty.Medium.ordinal());
+
+            recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
+            recView.setLayoutManager(new LinearLayoutManager(this));
+
+        } else {
+            EditText name = (EditText) findViewById(R.id.etName);
+
+            if(name != null && difficulty != null) {
+                name.setText(savedInstanceState.getString("name"));
+                difficulty.setSelection(savedInstanceState.getInt("difficulty"));
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        EditText name = (EditText) findViewById(R.id.etName);
+        Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
+        Bundle tempSave = new Bundle();
+
+        if(name != null && difficulty != null) {
+            tempSave.putString("name", name.getText().toString());
+            tempSave.putInt("difficulty", difficulty.getSelectedItemPosition());
+        }
     }
 
     public void onClickAddFriendButton(View v){
@@ -37,11 +70,10 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         // set title
-        alertDialogBuilder.setTitle("Your Title");
+        alertDialogBuilder.setTitle("Add a friend");
 
         // set dialog message
         alertDialogBuilder
-                .setTitle("Add a friend")
                 .setMessage("Select how you want to add a friend")
                 .setCancelable(true)
                 .setNegativeButton("Facebook",new DialogInterface.OnClickListener() {
@@ -60,6 +92,5 @@ public class SettingsActivity extends AppCompatActivity {
 
         // show it
         alertDialog.show();
-
     }
 }
