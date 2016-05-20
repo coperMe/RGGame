@@ -5,6 +5,8 @@
     <string name="bScores">Score</string>
     <string name="bSettings">Settings</string>
 
+    <string name="bSolveRiddle">Solve</string>
+
     <string name="tvName">Name:</string>
     <string name="etName">Introduce your name here</string>
     <string name="tvDifficulty">Difficulty:</string>

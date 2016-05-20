@@ -2,6 +2,7 @@ package com.example.coper.rggame.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,8 +18,9 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private Vector<Riddle> riddleList;
+    private Vector<Riddle> riddleList = null;
     private String []indexes;
+    private int currentRiddle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,24 +29,29 @@ public class PlayActivity extends AppCompatActivity {
 
         indexes = new String[10];
         riddleList = new Vector<>();
+        currentRiddle = 0;
 
         generateRiddleVector();
 
-        startGame();
+        playGame();
     }
 
-    private void startGame() {
-        TextView tvRiddle = (TextView) findViewById(R.id.tvRiddle);
-        EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
+    private void playGame() {
+        /**
+        * Temporarily this method will set the riddles from the riddleList using the indexes
+        * array. In the future, it will just iterate within the array recovered from the
+        * database in SQLite.
+        */
 
-        for(String i : this.indexes){
-            /**
-             * Temporarilly this method will set the riddles from the riddleList using the indexes
-             * array. In the future, it will just iterate within the array recovered from the
-             * database in SQLite.
-             */
-            tvRiddle.setText(this.riddleList.get(Integer.valueOf(i)).getRiddle());
-        }
+        this.drawScreen();
+    }
+
+    private void drawScreen(){
+        TextView riddle = (TextView) findViewById(R.id.tvRiddle);
+        EditText answer = (EditText) findViewById(R.id.etAnswer);
+
+        riddle.setText(this.riddleList.get(this.currentRiddle).getRiddle());
+        answer.setText("");
     }
 
     public Vector<Riddle> generateRiddleVector(){
@@ -161,13 +168,48 @@ public class PlayActivity extends AppCompatActivity {
         riddleList.add(rid);
 
         while (position < indexes.length){
-            Double random = Math.floor(Math.random())%riddleList.size();
-            if(!Arrays.asList(indexes).contains(random)) {
-                indexes[position] = Integer.toString(random.intValue()+1);
+            Double randomTaken = Math.floor(Math.random())%riddleList.size();
+            if(!Arrays.asList(indexes).contains(randomTaken)) {
+                indexes[position] = Integer.toString(randomTaken.intValue()+1);
                 position++;
             }
         }
 
         return riddleList;
+    }
+
+    public void onClickSolveButton(View v){
+        /**
+         * This listener checks the answer and when it is right, it refreshes the screen with the
+         * following riddle (if possible). When it checks the answer and it is wrong, it sets an
+         * error message linked to the answer field.
+         */
+        EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
+
+        if(this.checkAnswer()){
+            this.currentRiddle++;
+            if(this.currentRiddle < this.riddleList.size())
+                this.drawScreen();
+            else
+                endGame();
+        }else
+            etAnswer.setError("So... You are not as brilliant as you thought, huh?");
+    }
+
+    private void endGame() {
+        /**
+         * This method implements the saving of the data from the game to the local scores
+         * SQLite table
+         */
+        /// TODO
+    }
+
+    public boolean checkAnswer(){
+        EditText answerField = (EditText) findViewById(R.id.etAnswer);
+
+        String proposedAnswer = answerField.getText().toString();
+        String realAnswer = this.riddleList.get(this.currentRiddle).getAnswer();
+
+        return (realAnswer.compareToIgnoreCase(proposedAnswer)==0);
     }
 }
