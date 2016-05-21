@@ -23,15 +23,16 @@ import java.util.Vector;
 public class PlayActivity extends AppCompatActivity {
 
     private Vector<Riddle> riddleList = null;
-    private String[] indexes;
-    private int currentRiddle, acumulatedScore, bonusStreak;
+    private int[] indexes;
+    private int currentRiddle, acumScore, bonusStreak;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        this.indexes = new String[10];
+
+        this.indexes = new int[10];
         this.riddleList = new Vector<>();
 
         this.setupAnswerField();
@@ -40,13 +41,13 @@ public class PlayActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             this.initIndexesArray();
 
-            this.currentRiddle = Integer.valueOf(indexes[0]);
-            this.acumulatedScore = 0;
+            this.currentRiddle = indexes[0];
+            this.acumScore = 0;
             this.bonusStreak = 0;
         }else{
-            this.currentRiddle = savedInstanceState.getInt("current");
             this.bonusStreak = savedInstanceState.getInt("bonus");
-            this.acumulatedScore = savedInstanceState .getInt("score");
+            this.currentRiddle = savedInstanceState.getInt("current");
+            this.acumScore = savedInstanceState .getInt("score");
         }
 
         this.playGame();
@@ -58,9 +59,10 @@ public class PlayActivity extends AppCompatActivity {
 
         Bundle tempSave = new Bundle();
 
+        tempSave.putIntArray("indexes", this.indexes);
         tempSave.putInt("current", this.currentRiddle);
         tempSave.putInt("bonus", this.bonusStreak);
-        tempSave.putInt("score", this.acumulatedScore);
+        tempSave.putInt("score", this.acumScore);
     }
 
     private void initIndexesArray() {
@@ -68,8 +70,8 @@ public class PlayActivity extends AppCompatActivity {
 
         while (position < this.indexes.length) {
             Double randomTaken = Math.floor(Math.random()) % (this.riddleList.size() + 1);
-            if (!Arrays.asList(this.indexes).contains(randomTaken.toString())) {
-                this.indexes[position] = Integer.toString(randomTaken.intValue() + 1);
+            if (!Arrays.asList(this.indexes).contains(randomTaken.intValue())) {
+                this.indexes[position] = randomTaken.intValue() + 1;
                 position++;
             }
         }
@@ -124,8 +126,8 @@ public class PlayActivity extends AppCompatActivity {
         EditText answer = (EditText) findViewById(R.id.etAnswer);
 
         if(riddle != null && answer != null && score != null) {
-            score.setText(String.valueOf(this.acumulatedScore));
-            riddle.setText(this.riddleList.get(this.currentRiddle).getRiddle());
+            score.setText(String.valueOf(this.acumScore));
+            riddle.setText(this.riddleList.get(this.indexes[this.currentRiddle]).getRiddle());
             answer.setText("");
         }
     }
@@ -244,10 +246,10 @@ public class PlayActivity extends AppCompatActivity {
         EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 
         if (this.checkAnswer()) {
-            this.acumulatedScore += 25 + 25*bonusStreak;
+            this.acumScore += 25 + 50*this.bonusStreak;
             this.bonusStreak++;
-
             this.currentRiddle++;
+
             if (this.currentRiddle < this.riddleList.size())
                 this.drawScreen();
             else
