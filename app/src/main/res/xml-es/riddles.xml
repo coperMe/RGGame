@@ -1,94 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resquizz>
-    <riddle>
+    <riddle
         riddle = "We're five little items of an everyday sort. You'll find us all in a tennis court"
-        answer = "Vowels"
-    </riddle>
+        answer = "Vowels"/>
 
-    <riddle>
-        riddle = "What is the beginning of eternity, the end of time and space,
+    <riddle
+        riddle = "¿Que es el comienzo de la eternidad      , the end of time and space,
                   the beginning of every end and the end of every race?"
-        answer = "Letter e"
-    </riddle>
+        answer = "Letra e"/>
 
-    <riddle>
-        riddle = "The more you take away, the larger it grows. What is it?"
-        answer = "A hole"
-    </riddle>
+    <riddle
+        riddle = "Cuanto mas quitas, mayor se hace. ¿Que es?"
+        answer = "Un agujero"/>
 
-    <riddle>
+    <riddle
         riddle = "Tear one off and scratch my head, what was once red is black instead."
-        answer = "A match"
-    </riddle>
+        answer = "Una cerilla"/>
 
-    <riddle>
+    <riddle
         riddle = "What is it that no man wants to have but no man want to loose?"
-        answer = "A lawsuit"
-    </riddle>
+        answer = "Un caso judicial"/>
 
-    <riddle>
+    <riddle
         riddle = "What is it that travels on all fours in the morning,
                   on two legs at noon, and three at twilight?"
-        answer = "A man"
-    </riddle>
+        answer = "Un hombre"/>
 
-    <riddle>
+    <riddle
         riddle = "If you do not know where I am, then I am something, but when you know where I am, I am nothing.
         What am I?"
-        answer = "A riddle"
-    </riddle>
+        answer = "Una adivinanza"/>
 
-    <riddle>
+    <riddle
         riddle = "Everything in me is ancient. What am I?"
-        answer = "A museum"
-    </riddle>
+        answer = "Un museo"/>
 
-    <riddle>
+    <riddle
         riddle = "What starts at the top and then goes down,
         has the ability to purify and has all the colours of the rainbow?"
-        answer = "Light"
-    </riddle>
+        answer = "Luz"/>
 
-    <riddle>
+    <riddle
         riddle = "What kind of art does Aquaman prefer?"
-        answer = "Watercolor"
-    </riddle>
+        answer = "Acuarela"/>
 
-    <riddle>
+    <riddle
         riddle = "It is nowhere, but it's everywhere except if something is. What is it?"
-        answer = "Nothing"
-    </riddle>
+        answer = "Nada"/>
 
-    <riddle>
+    <riddle
         riddle = "What is strong enough to smash ships but still fears the sun?"
-        answer = "Ice"
-    </riddle>
+        answer = "Hielo"/>
 
-    <riddle>
+    <riddle
         riddle = "The poor have, the rich need it and if you eat it you'll die"
-        answer = "Nothing"
-    </riddle>
+        answer = "Nada"/>
 
-    <riddle>
-        riddle = "If you know me, you'll want to share me but if you share me, I'll be gone.
-        What am I?"
-        answer = "A secret"
-    </riddle>
+    <riddle
+        riddle = "Si me conoces, quieres compartirme. Pero si me compartes, desaparezco. ¿Que soy?"
+        answer = "Un secreto"/>
 
-    <riddle>
-        riddle = "I'll be right under your feet in the midday sun; you cannot leave me, no matter how fast you run"
-        answer = "Shadow"
-    </riddle>
+    <riddle
+        riddle = "Estaré justo bajo tus pies con el sol de medio día;
+        no puedes deshacerte de mí, no importa cuánto corras"
+        answer = "Sombra"/>
 
-    <riddle>
+    <riddle
         riddle = "The more there is, the less you see. What could I be?"
-        answer = "Darkness"
-    </riddle>
+        answer = "Oscuridad"/>
 
-    <riddle>
+    <riddle
         riddle = "Hit me hard and I will crack but you'll never stop me from staring back.
         What am I?"
-        answer = "A mirror"
-    </riddle>
+        answer = "Un espejo"/>
 
 </resquizz>
