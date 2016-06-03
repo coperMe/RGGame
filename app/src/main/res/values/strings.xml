@@ -12,4 +12,7 @@
     <string name="tvDifficulty">Difficulty:</string>
     <string name="tvFriendList">Friends list:</string>
     <string name="bAddFriend">Add friend</string>
+
+    <string name="continueGame">Yes</string>
+    <string name="notContinueGame">No</string>
 </resources>

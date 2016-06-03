@@ -2,10 +2,10 @@
 <resources>
 
     <string-array name="spinnerArray">
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
-        <item>Riddle Expert</item>
+        <item>Fácil</item>
+        <item>Medio</item>
+        <item>Difícil</item>
+        <item>Experto en enigmas</item>
     </string-array>
 
 </resources>

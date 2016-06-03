@@ -1,6 +1,6 @@
 package com.example.coper.rggame.POJO;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class User {
 
-    private Uri profilePic;
+    private Bitmap profilePic;
     private String name;
     private Difficulty difficulty;
     private ArrayList<User> friends;
@@ -27,11 +27,11 @@ public class User {
         this.friends = friends;
     }
 
-    public Uri getProfilePic() {
+    public Bitmap getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(Uri profilePic) {
+    public void setProfilePic(Bitmap profilePic) {
         this.profilePic = profilePic;
     }
 

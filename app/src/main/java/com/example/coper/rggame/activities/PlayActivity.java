@@ -1,7 +1,11 @@
 package com.example.coper.rggame.activities;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DialogTitle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -40,14 +44,62 @@ public class PlayActivity extends AppCompatActivity {
         this.fillRiddleVector();
 
         if(savedInstanceState == null) {
+        /**
+         * This case contemplates the situation when the application has been just started.
+         */
+            final SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+            final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
+            if(currentRid != -1){
 
-            this.initIndexesArray();
+                DialogTitle dt = new DialogTitle(this);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-            this.currentRiddle = 0;
-            this.acumScore = 0;
-            this.bonusStreak = 0;
+                // set title
+                alertDialogBuilder.setTitle("Add a friend");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("A previous game has been detected. Dou you want to continue?")
+                        .setCancelable(false)
+                        .setNegativeButton(R.string.notContinueGame,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                initIndexesArray();
+
+                                currentRiddle = 0;
+                                acumScore = 0;
+                                bonusStreak = 0;
+
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton(R.string.continueGame,new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                acumScore = currentRid;
+                                bonusStreak = inGame_prefs.getInt("bonusStreak",-1);
+                                currentRiddle = inGame_prefs.getInt("currentRiddle",-1);
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+
+            }else {
+                this.initIndexesArray();
+
+                this.currentRiddle = 0;
+                this.acumScore = 0;
+                this.bonusStreak = 0;
+            }
 
         }else{
+            /**
+             * This case contemplates the situation when the application has been  previously
+             * started and the user have changed the focus on the app or the orientation of the
+             * screen.
+             */
 
             this.currentRiddle = savedInstanceState.getInt("current");
             this.bonusStreak = savedInstanceState.getInt("bonus");
@@ -69,6 +121,20 @@ public class PlayActivity extends AppCompatActivity {
         tempSave.putInt("current", this.currentRiddle);
         tempSave.putInt("bonus", this.bonusStreak);
         tempSave.putInt("score", this.acumScore);
+
+        SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = inGame_prefs.edit();
+
+        prefsEditor.putInt("currentRiddle", this.currentRiddle);
+        prefsEditor.putInt("bonusStreak", this.bonusStreak);
+        prefsEditor.putInt("score", this.acumScore);
+
+
+        /// put indexes into a set
+        prefsEditor.putStringSet("indexes", null);
+
+
+        prefsEditor.apply();
     }
 
     private void initIndexesArray() {
@@ -77,7 +143,7 @@ public class PlayActivity extends AppCompatActivity {
 
         while (position < this.indexes.length) {
             Double randomTaken = Math.floor(Math.random()) % this.riddleList.size();
-            if (Arrays.asList(this.indexes).contains(randomTaken.intValue()) == false) {
+            if (!Arrays.asList(this.indexes).contains(randomTaken.intValue())) {
                 this.indexes[position] = randomTaken.intValue();
                 position++;
             }
@@ -85,12 +151,9 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void playGame() {
-        /**
-         * Temporarily this method will set the riddles from the riddleList using the indexes
-         * array. In the future, it will just iterate within the array recovered from the
-         * database in SQLite
-         */
+
         this.drawScreen();
+
     }
 
     private void setupAnswerField(){
@@ -120,7 +183,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
             });
 
-            /*
+            /**
              * This listener is set in order to detect when the user pushes the enter key in the
              * keyboard and it acts like the solveButton (checking answer and refreshing the screen.
              */
@@ -138,7 +201,6 @@ public class PlayActivity extends AppCompatActivity {
                                 drawScreen();
                             else
                                 endGame();
-
                         }else {
                             EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 

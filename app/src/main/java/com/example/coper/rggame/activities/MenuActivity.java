@@ -25,6 +25,7 @@ public class MenuActivity extends AppCompatActivity {
         switch(v.getId()){
             case R.id.playButton:
                 intention = new Intent(this, PlayActivity.class);
+                intention.putExtra("continue",true);
                 break;
             case R.id.scoresButton:
                 intention = new Intent(this, ScoresActivity.class);
@@ -35,12 +36,6 @@ public class MenuActivity extends AppCompatActivity {
         }
 
         startActivity(intention);
-    }
-
-    public void onClickSettingsButton(View v){
-
-        startActivity(new Intent(this, SettingsActivity.class));
-
     }
 
 }
