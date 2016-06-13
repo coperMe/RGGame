@@ -22,6 +22,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -30,8 +33,9 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
+    private final static int RIDDLES_PER_GAME = 10;
     private Vector<Riddle> riddleList = null;
-    private int[] indexes;
+    private Set<String> indexes;
     private int currentRiddle, acumScore, bonusStreak;
 
 
@@ -42,6 +46,7 @@ public class PlayActivity extends AppCompatActivity {
 
         this.setupAnswerField();
         this.fillRiddleVector();
+        this.initIndexes();
 
         if(savedInstanceState == null) {
         /**
@@ -55,7 +60,7 @@ public class PlayActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
                 // set title
-                alertDialogBuilder.setTitle("Add a friend");
+                alertDialogBuilder.setTitle("Continue game");
 
                 // set dialog message
                 alertDialogBuilder
@@ -63,20 +68,22 @@ public class PlayActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setNegativeButton(R.string.notContinueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                initIndexesArray();
-
-                                currentRiddle = 0;
-                                acumScore = 0;
-                                bonusStreak = 0;
+                                PlayActivity.this.currentRiddle = 0;
+                                PlayActivity.this.acumScore = 0;
+                                PlayActivity.this.bonusStreak = 0;
 
                                 dialog.dismiss();
                             }
                         })
                         .setPositiveButton(R.string.continueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                acumScore = currentRid;
-                                bonusStreak = inGame_prefs.getInt("bonusStreak",-1);
-                                currentRiddle = inGame_prefs.getInt("currentRiddle",-1);
+                                PlayActivity.this.acumScore = currentRid;
+                                PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",-1);
+                                PlayActivity.this.currentRiddle = inGame_prefs.getInt("currentRiddle",-1);
+
+                                PlayActivity.this.indexes = inGame_prefs.getStringSet("prev_indexes", null);
+
+                                dialog.dismiss();
                             }
                         });
 
@@ -87,8 +94,6 @@ public class PlayActivity extends AppCompatActivity {
                 alertDialog.show();
 
             }else {
-                this.initIndexesArray();
-
                 this.currentRiddle = 0;
                 this.acumScore = 0;
                 this.bonusStreak = 0;
@@ -100,12 +105,13 @@ public class PlayActivity extends AppCompatActivity {
              * started and the user have changed the focus on the app or the orientation of the
              * screen.
              */
-
+            String []savedIndexes = savedInstanceState.getStringArray("indexes");
             this.currentRiddle = savedInstanceState.getInt("current");
             this.bonusStreak = savedInstanceState.getInt("bonus");
             this.acumScore = savedInstanceState .getInt("score");
-            this.indexes = savedInstanceState.getIntArray("indexes");
-
+            this.indexes = new HashSet<String>();
+            if(savedIndexes != null)
+                this.indexes.addAll(Arrays.asList(savedIndexes));
         }
 
         this.playGame();
@@ -117,7 +123,15 @@ public class PlayActivity extends AppCompatActivity {
 
         Bundle tempSave = new Bundle();
 
-        tempSave.putIntArray("indexes", this.indexes);
+
+        int position = 0;
+        String [] tempCasting = new String[10];
+        for(String index : this.indexes) {
+            tempCasting[position] = index;
+            position++;
+        }
+
+        tempSave.putStringArray("indexes", tempCasting);
         tempSave.putInt("current", this.currentRiddle);
         tempSave.putInt("bonus", this.bonusStreak);
         tempSave.putInt("score", this.acumScore);
@@ -128,23 +142,20 @@ public class PlayActivity extends AppCompatActivity {
         prefsEditor.putInt("currentRiddle", this.currentRiddle);
         prefsEditor.putInt("bonusStreak", this.bonusStreak);
         prefsEditor.putInt("score", this.acumScore);
-
-
-        /// put indexes into a set
-        prefsEditor.putStringSet("indexes", null);
-
+        prefsEditor.putStringSet("prev_indexes", this.indexes);
 
         prefsEditor.apply();
     }
 
-    private void initIndexesArray() {
-        this.indexes = new int[10];
+    private void initIndexes() {
+        this.indexes = new HashSet<String>();
         int position = 0;
 
-        while (position < this.indexes.length) {
-            Double randomTaken = Math.floor(Math.random()) % this.riddleList.size();
-            if (!Arrays.asList(this.indexes).contains(randomTaken.intValue())) {
-                this.indexes[position] = randomTaken.intValue();
+        while(position < this.RIDDLES_PER_GAME){
+            Random random = new Random();
+            int randTaken = random.nextInt(this.riddleList.size());
+            if (!this.indexes.contains(String.valueOf(randTaken))) {
+                this.indexes.add(String.valueOf(randTaken));
                 position++;
             }
         }
@@ -160,7 +171,6 @@ public class PlayActivity extends AppCompatActivity {
         final EditText answer = (EditText) findViewById(R.id.etAnswer);
 
         if(answer != null) {
-
             /*
              * This listener is set in order to nullify the error message when the text inside the
              * the  editText changes.
@@ -226,20 +236,29 @@ public class PlayActivity extends AppCompatActivity {
 
         if(riddle != null && answer != null && score != null) {
             score.setText(String.valueOf(this.acumScore));
-            riddle.setText(this.riddleList.get(this.indexes[this.currentRiddle]).getRiddle());
+
+            String [] tempCasting = new String[10];
+            int position = 0;
+
+            for(String currentIndex : this.indexes) {
+                tempCasting[position] = currentIndex;
+                position++;
+            }
+
+            String currRiddle = this.riddleList.get(Integer.parseInt(tempCasting[this.currentRiddle])).getRiddle();
+            riddle.setText(currRiddle);
             answer.setText("");
         }
     }
 
     public void fillRiddleVector() {
         /**
-         / The first implementation of this method stored hardcoded all the riddles in a Vector of
-         / riddles. Final implementation will recover the indexes stored at the String array from
+         / The implementation recovers the indexes stored at the String array from
          / a SQLite database, storage of the riddles.
          / A game consists in 10 riddles with a bonus score for each riddle answered in a row
          */
         XmlPullParser riddleLoader = getResources().getXml(R.xml.riddles);
-        this.riddleList = new Vector<>();
+        this.riddleList = new Vector<Riddle>();
 
         try {
             int riddleId=0;
@@ -287,16 +306,23 @@ public class PlayActivity extends AppCompatActivity {
     private void endGame() {
         /**
          * This method implements the saving of the data from the game to the local scores
-         * SQLite table
+         * SQLite table and removes current_riddle from the preferences in order to not detect a
+         * false started game when the user starts again to play.
          */
-        /// TODO
+        SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor edit = inGame_prefs.edit();
+
+        edit.remove("current_riddle");
+        edit.apply();
     }
 
     public boolean checkAnswer() {
         EditText answerField = (EditText) findViewById(R.id.etAnswer);
 
         String proposedAnswer = "";
-        String realAnswer = this.riddleList.get(this.indexes[this.currentRiddle]).getAnswer();
+        String [] tempCasting = (String[]) this.indexes.toArray();
+
+        String realAnswer = this.riddleList.get(Integer.valueOf(tempCasting[this.currentRiddle])).getAnswer();
 
         if(answerField!=null)
             proposedAnswer = answerField.getText().toString();

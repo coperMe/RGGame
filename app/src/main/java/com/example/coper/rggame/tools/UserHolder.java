@@ -1,6 +1,6 @@
 package com.example.coper.rggame.tools;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -30,8 +30,8 @@ public class UserHolder extends RecyclerView.ViewHolder {
         return profilePic;
     }
 
-    public void setProfilePic(Uri profilePic) {
-        this.profilePic.setImageURI(profilePic);
+    public void setProfilePic(Bitmap profilePic) {
+        this.profilePic.setImageBitmap(profilePic);
     }
 
     public TextView getName() {
