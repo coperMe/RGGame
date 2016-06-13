@@ -1,6 +1,7 @@
 package com.example.coper.rggame.activities;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -80,11 +81,13 @@ public class SettingsActivity extends AppCompatActivity {
                 .setNegativeButton("Facebook",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         ///TODO
+
                     }
                 })
                 .setPositiveButton("Proximity",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         ///TODO
+
                     }
                 });
 
@@ -93,5 +96,18 @@ public class SettingsActivity extends AppCompatActivity {
 
         // show it
         alertDialog.show();
+    }
+
+    public void onClickSaveButton(View v){
+        EditText etName = (EditText) findViewById(R.id.etName);
+        Spinner spin = (Spinner) findViewById(R.id.sDifficultySpinner);
+
+        SharedPreferences preferences = getSharedPreferences("game_preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("userName", etName.getText().toString());
+        editor.putInt("difficulty", spin.getSelectedItemPosition());
+
+        editor.apply();
     }
 }

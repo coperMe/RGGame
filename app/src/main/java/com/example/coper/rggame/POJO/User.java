@@ -21,11 +21,14 @@ public class User {
         this.friends = new ArrayList<User>();
     }
 
-    public User(String name, Difficulty difficulty, ArrayList<User> friends) {
+    public User(Bitmap profileImage, String name, Difficulty difficulty, ArrayList<User> friends) {
+        this.profilePic = profileImage;
         this.name = name;
         this.difficulty = difficulty;
         this.friends = friends;
     }
+
+
 
     public Bitmap getProfilePic() {
         return profilePic;

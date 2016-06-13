@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.coper.rggame.POJO.Riddle;
 import com.example.coper.rggame.R;
+import com.example.coper.rggame.tools.MyOpenHelper;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,7 +34,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final static int RIDDLES_PER_GAME = 10;
+    private final int RIDDLES_PER_GAME = 10;
     private Vector<Riddle> riddleList = null;
     private Set<String> indexes;
     private int currentRiddle, acumScore, bonusStreak;
@@ -201,24 +202,24 @@ public class PlayActivity extends AppCompatActivity {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_NULL) {
-                        /*
-                        if(checkAnswer()){
-                            acumScore += 25 + 50*bonusStreak;
-                            bonusStreak++;
-                            currentRiddle++;
 
-                            if (currentRiddle < riddleList.size())
-                                drawScreen();
+                        if(PlayActivity.this.checkAnswer()){
+                            PlayActivity.this.acumScore += 25 + 50*bonusStreak;
+                            PlayActivity.this.bonusStreak++;
+                            PlayActivity.this.currentRiddle++;
+
+                            if (PlayActivity.this.currentRiddle < PlayActivity.this.RIDDLES_PER_GAME)
+                                PlayActivity.this.drawScreen();
                             else
-                                endGame();
+                                PlayActivity.this.endGame();
                         }else {
                             EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 
-                            bonusStreak = 0;
+                            PlayActivity.this.bonusStreak = 0;
                             if(etAnswer != null)
                                 etAnswer.setError("So... You are not as brilliant as you thought, huh?");
                         }
-                        */
+
                         return true;
                     }
 
@@ -293,14 +294,21 @@ public class PlayActivity extends AppCompatActivity {
             this.bonusStreak++;
             this.currentRiddle++;
 
-            if (this.currentRiddle < this.riddleList.size())
-                this.drawScreen();
-            else
-                endGame();
+            this.loadNextRiddle();
+
         } else if(etAnswer!=null) {
             this.bonusStreak = 0;
             etAnswer.setError("So... You are not as brilliant as you thought, huh?");
         }
+    }
+
+    private void loadNextRiddle(){
+
+        if (this.currentRiddle < this.RIDDLES_PER_GAME)
+            this.drawScreen();
+        else
+            endGame();
+
     }
 
     private void endGame() {
@@ -309,6 +317,15 @@ public class PlayActivity extends AppCompatActivity {
          * SQLite table and removes current_riddle from the preferences in order to not detect a
          * false started game when the user starts again to play.
          */
+        SharedPreferences game_prefs = getSharedPreferences("game_preferences", MODE_PRIVATE);
+        MyOpenHelper database = new MyOpenHelper(this);
+
+        //database.insert( User XXXX, this.acumScore);
+        database.insert(game_prefs.getString("userName", null), this.acumScore);
+
+        database.close();
+
+
         SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor edit = inGame_prefs.edit();
 
@@ -320,7 +337,12 @@ public class PlayActivity extends AppCompatActivity {
         EditText answerField = (EditText) findViewById(R.id.etAnswer);
 
         String proposedAnswer = "";
-        String [] tempCasting = (String[]) this.indexes.toArray();
+        String [] tempCasting = new String[10];
+        int position = 0;
+        for(String index : this.indexes) {
+            tempCasting[position] = index;
+            position++;
+        }
 
         String realAnswer = this.riddleList.get(Integer.valueOf(tempCasting[this.currentRiddle])).getAnswer();
 
