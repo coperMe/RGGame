@@ -30,6 +30,7 @@ import java.util.Vector;
 public class SettingsActivity extends AppCompatActivity {
 
     private RecyclerView recView;
+    private int imageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,10 @@ public class SettingsActivity extends AppCompatActivity {
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
         Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
 
+
+
         if(savedInstanceState == null){
+            Bitmap image;
             SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
 
             if(difficulty != null && name != null && sex != null && profileImage != null) {
@@ -53,14 +57,17 @@ public class SettingsActivity extends AppCompatActivity {
 
                 difficulty.setSelection(preferences.getInt("difficulty", Difficulty.Medium.ordinal()));
                 sex.setSelection(preferences.getInt("sex", 0));
-                Bitmap image;
 
-                if(sex.getSelectedItemPosition() == Sex.Woman.ordinal())
-                    image = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                                                         R.drawable.ui_default_batgirl);
-                else
-                    image = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                                                         R.drawable.ui_default_batman);;
+                if(sex.getSelectedItemPosition() == Sex.Woman.ordinal()) {
+                    this.imageId = R.drawable.ui_default_batgirl;
+                    image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                                                          this.imageId );
+                }else {
+                    this.imageId = R.drawable.ui_default_batman;
+                    image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                                                          this.imageId);
+
+                }
 
                 profileImage.setImageBitmap(image);
             }
@@ -68,12 +75,15 @@ public class SettingsActivity extends AppCompatActivity {
             recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
             recView.setLayoutManager(new LinearLayoutManager(this));
         } else {
-
-
-            if(name != null && difficulty != null && sex != null) {
+            Bitmap image;
+            if(name != null && difficulty != null && sex != null && profileImage != null) {
                 name.setText(savedInstanceState.getString("name"));
                 difficulty.setSelection(savedInstanceState.getInt("difficulty"));
                 sex.setSelection(savedInstanceState.getInt("sex"));
+                this.imageId = savedInstanceState.getInt("profileImage");
+                image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                                                      this.imageId);
+                profileImage.setImageBitmap(image);
             }
         }
     }
@@ -85,12 +95,14 @@ public class SettingsActivity extends AppCompatActivity {
         EditText name = (EditText) findViewById(R.id.etName);
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
         Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
+        ImageView profile = (ImageView) findViewById(R.id.ivUserImage);
         Bundle tempSave = new Bundle();
 
         if(name != null && difficulty != null && sex != null) {
             tempSave.putString("name", name.getText().toString());
             tempSave.putInt("difficulty", difficulty.getSelectedItemPosition());
             tempSave.putInt("sex", sex.getSelectedItemPosition());
+            tempSave.putInt("profileImage", this.imageId);
         }
 
         SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
