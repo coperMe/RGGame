@@ -10,7 +10,7 @@
     android:background="@android:color/black"
     tools:context=".activities.SettingsActivity">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -21,7 +21,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivUserImage"
@@ -31,7 +31,7 @@
         android:layout_alignTop="@id/tvName"
         android:layout_alignBottom="@+id/etName" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -45,7 +45,7 @@
 
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -57,15 +57,24 @@
         android:layout_below="@+id/etName"
         android:layout_alignParentStart="true" />
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sSexSpinner"
+        android:background="@color/riddlerGreen"
+        android:layout_alignBottom="@+id/ivUserImage"
+        android:layout_alignParentEnd="true"
+        android:entries="@array/spinnerSex"/>
+
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sDifficultySpinner"
         android:background="@color/riddlerGreen"
         android:layout_below="@+id/etName"
         android:layout_alignParentRight="true"
-        android:layout_alignBottom="@+id/tvDifficulty"
-        android:entries="@array/spinnerArray" />
+        android:layout_alignBottom="@+id/sSexSpinner"
+        android:entries="@array/spinnerDifficulty" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -106,5 +115,4 @@
             android:id="@+id/rvFriendsList">
         </android.support.v7.widget.RecyclerView>
     </android.support.v7.widget.ContentFrameLayout>
-
 </RelativeLayout>

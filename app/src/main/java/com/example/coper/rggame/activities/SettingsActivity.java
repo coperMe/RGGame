@@ -34,21 +34,30 @@ public class SettingsActivity extends AppCompatActivity {
 
         recView = (RecyclerView) findViewById(R.id.rvFriendsList);
 
+        EditText name = (EditText) findViewById(R.id.etName);
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
+        Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
 
         if(savedInstanceState == null){
-            if(difficulty != null)
+            SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
+
+            if(difficulty != null && name != null && sex != null) {
                 difficulty.setSelection(Difficulty.Medium.ordinal());
+
+                name.setText(preferences.getString("name",""));
+                difficulty.setSelection(preferences.getInt("difficulty", Difficulty.Medium.ordinal()));
+                sex.setSelection(preferences.getInt("sex", 0));
+            }
 
             recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
             recView.setLayoutManager(new LinearLayoutManager(this));
-
         } else {
-            EditText name = (EditText) findViewById(R.id.etName);
 
-            if(name != null && difficulty != null) {
+
+            if(name != null && difficulty != null && sex != null) {
                 name.setText(savedInstanceState.getString("name"));
                 difficulty.setSelection(savedInstanceState.getInt("difficulty"));
+                sex.setSelection(savedInstanceState.getInt("sex"));
             }
         }
     }
@@ -59,12 +68,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         EditText name = (EditText) findViewById(R.id.etName);
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
+        Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
         Bundle tempSave = new Bundle();
 
-        if(name != null && difficulty != null) {
+        if(name != null && difficulty != null && sex != null) {
             tempSave.putString("name", name.getText().toString());
             tempSave.putInt("difficulty", difficulty.getSelectedItemPosition());
+            tempSave.putInt("sex", sex.getSelectedItemPosition());
         }
+
+        SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if(name != null && sex != null && difficulty != null) {
+            editor.putString("name", name.getText().toString());
+            editor.putInt("sex", sex.getSelectedItemPosition());
+            editor.putInt("difficulty", difficulty.getSelectedItemPosition());
+        }
+
+        editor.apply();
     }
 
     public void onClickAddFriendButton(View v){
@@ -105,8 +127,10 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("game_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putString("userName", etName.getText().toString());
-        editor.putInt("difficulty", spin.getSelectedItemPosition());
+        if(etName != null && spin != null) {
+            editor.putString("userName", etName.getText().toString());
+            editor.putInt("difficulty", spin.getSelectedItemPosition());
+        }
 
         editor.apply();
     }
