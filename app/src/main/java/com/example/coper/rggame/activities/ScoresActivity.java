@@ -34,6 +34,7 @@ public class ScoresActivity extends AppCompatActivity {
             MyOpenHelper db = new MyOpenHelper(this);
             Vector<Scoring> data = db.extractAll();
             db.close();
+
             if (tabs != null) {
                 tabs.setup();
 

@@ -1,5 +1,6 @@
 package com.example.coper.rggame.tools;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,19 +29,15 @@ public class MyOpenHelper extends SQLiteOpenHelper {
          * @author David García Molino
          */
         /// Users table
-        db.execSQL("CREATE TABLE Users (" +
-                "userId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "profileImage BLOB, " +
-                "name TEXT)");
+        db.execSQL("CREATE TABLE Users ( userId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                        "profileImage BLOB, " +
+                                        "name TEXT)");
 
         /// Scores table
-        db.execSQL("CREATE TABLE Scores (" +
-                "scoreId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "userId INTEGER, " +
-                "score INTEGER, " +
-                "FOREIGN KEY (userId) REFERENCES Users(userId))");
-
-        db.close();
+        db.execSQL("CREATE TABLE Scores ( scoreId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                         "userId INTEGER, " +
+                                         "score INTEGER, " +
+                                         "FOREIGN KEY (userId) REFERENCES Users(userId))");
     }
 
     @Override
@@ -54,16 +51,12 @@ public class MyOpenHelper extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery("SELECT userId, scoreId" +
                                           "FROM Users, Scores" +
                                           "WHERE name = " + user.getName(), null);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
-
-        database.execSQL("INSERT INTO Users " +
-                "VALUES ( null, " +
-                          cursor.getInt(1) + ", " +
-                          //stream.toByteArray().toString() + ", " +
-                          cursor.getInt(0) + ", " +
-                          Integer.toString(score) +")");
+        cursor.moveToFirst();
+        database.execSQL("INSERT INTO Scores " +
+                         "VALUES ( null, " +
+                                   cursor.getInt(1) + ", " +
+                                   cursor.getInt(0) + ", " +
+                                   score +")");
 
         cursor.close();
         database.close();
@@ -81,31 +74,58 @@ public class MyOpenHelper extends SQLiteOpenHelper {
          */
         SQLiteDatabase database = getWritableDatabase();
 
+        ContentValues userInsertion = new ContentValues();
+        ContentValues scoresInsertion = new ContentValues();
 
         Cursor cursor = database.rawQuery( "SELECT userId" +
                                            "FROM Users" +
                                            "WHERE name = " + username, null);
+        cursor.moveToFirst();
 
-        if(cursor.getCount() != 0)
-            database.execSQL("INSERT INTO Scores " +
-                             "VALUES ( null, " +
-                                       cursor.getInt(0) + ", " +
-                                       score +")");
-        else {
+        if(cursor.getCount() != 0) {
+            scoresInsertion.put("userId", cursor.getInt(0));
+            scoresInsertion.put("score", score);
+            database.insert(getDatabaseName(), null, userInsertion);
+            /*
+            database.execSQL( "INSERT INTO Scores " +
+                              "VALUES ( null, " +
+                              cursor.getInt(0) + ", " +
+                              score + ")" );
+            */
+        }else {
             /// TODO (the part of adding the userProfile image is missing)
-            database.execSQL("INSERT INTO Users" +
-                             "VALUES ( null, " +
-                                      "null, " +
-                                       username + ")");
 
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            String imagePath = "";
+            Bitmap image  = BitmapFactory.decodeFile(imagePath);
+
+            //image.compress(Bitmap.CompressFormat.PNG, 0, stream);
+
+            //byte [] imageByted = stream.toByteArray();
+            byte [] imageByted = new byte[1];
+
+            userInsertion.put("profileImage", imageByted);
+            userInsertion.put("name", username);
+            database.insert(getDatabaseName(), null, userInsertion);
+            /*
+            database.execSQL("INSERT INTO Users" +
+                    "VALUES ( null, " +
+                    stream.toByteArray().toString() + ", " +
+                    username + ")");
+            */
             cursor = database.rawQuery( "SELECT userId" +
                                         "FROM Users" +
                                         "WHERE name = " + username, null );
 
+            scoresInsertion.put("userId", cursor.getInt(0));
+            scoresInsertion.put("score", score);
+            database.insert(getDatabaseName(), null, scoresInsertion);
+            /*
             database.execSQL("INSERT INTO Scores " +
                              "VALUES ( null, " +
                                        cursor.getInt(0) + ", " +
                                        score +")");
+            */
         }
 
         cursor.close();
@@ -118,23 +138,22 @@ public class MyOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getReadableDatabase();
 
         Cursor cursor = database.rawQuery( "SELECT profileImage, name, score" +
-                                           "FROM Users u, Scores s" +
-                                           "WHERE u.userId = s.userId", null );
+                                           "FROM Users u INNER JOIN Scores s" +
+                                           "ON u.userId = s.userId", null );
 
-        while (cursor.moveToNext()) {
-            byte [] imageByte = cursor.getBlob(0);
-            Bitmap image = BitmapFactory.decodeByteArray(imageByte,0,imageByte.length);
+        if(cursor.moveToFirst())
+            do {
+                byte [] imageByte = cursor.getBlob(0);
+                Bitmap image = BitmapFactory.decodeByteArray(imageByte,0,imageByte.length);
 
-            recovered.add(new Scoring( new User( image,
-                                                 cursor.getString(1),
-                                                 null,
-                                                 null ),
-                                       cursor.getInt(2)));
-        }
+                recovered.add(new Scoring( new User( image,
+                                                     cursor.getString(1) ),
+                                           cursor.getInt(2)));
+            } while (cursor.moveToNext());
 
         cursor.close();
         database.close();
 
-        return recovered;
+        return new Vector<Scoring>();
     }
 }

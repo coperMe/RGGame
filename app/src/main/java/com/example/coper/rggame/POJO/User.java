@@ -28,7 +28,12 @@ public class User {
         this.friends = friends;
     }
 
-
+    public User(Bitmap profileImage, String name) {
+        this.profilePic = profileImage;
+        this.name = name;
+        this.difficulty = Difficulty.Medium;
+        this.friends = new ArrayList<User>();
+    }
 
     public Bitmap getProfilePic() {
         return profilePic;
