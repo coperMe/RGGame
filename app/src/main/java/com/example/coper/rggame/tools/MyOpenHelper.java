@@ -133,27 +133,33 @@ public class MyOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public Vector<Scoring> extractAll(){
+    public Vector<Scoring> extractAll() {
         Vector<Scoring> recovered = new Vector<Scoring>();
         SQLiteDatabase database = getReadableDatabase();
 
-        Cursor cursor = database.rawQuery( "SELECT profileImage, name, score" +
-                                           "FROM Users u INNER JOIN Scores s" +
-                                           "ON u.userId = s.userId", null );
+        Cursor cursor = database.rawQuery("SELECT profileImage, name, score" +
+                "FROM Users u INNER JOIN Scores s" +
+                "ON u.userId = s.userId", null);
 
-        if(cursor.moveToFirst())
+        if (cursor.moveToFirst()){
             do {
-                byte [] imageByte = cursor.getBlob(0);
-                Bitmap image = BitmapFactory.decodeByteArray(imageByte,0,imageByte.length);
+                byte[] imageByte = cursor.getBlob(0);
+                Bitmap image = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
 
-                recovered.add(new Scoring( new User( image,
-                                                     cursor.getString(1) ),
-                                           cursor.getInt(2)));
+                recovered.add(new Scoring(new User(image,
+                        cursor.getString(1)),
+                        cursor.getInt(2)));
             } while (cursor.moveToNext());
 
-        cursor.close();
-        database.close();
+            cursor.close();
+            database.close();
 
-        return new Vector<Scoring>();
+            return recovered;
+        }else {
+            cursor.close();
+            database.close();
+
+            return new Vector<Scoring>();
+        }
     }
 }
