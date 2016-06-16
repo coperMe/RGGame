@@ -18,4 +18,5 @@
     <string name="notContinueGame">No</string>
 
     <string name="imageDescription">This image frame holds the user profile image</string>
+    <string name="facebook_app_id">303033563372753</string>
 </resources>
