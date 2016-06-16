@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/questionmark"
+    android:background="@drawable/questionmark_landscape"
     tools:context=".activities.PlayActivity">
 
     <android.support.v7.widget.AppCompatTextView
