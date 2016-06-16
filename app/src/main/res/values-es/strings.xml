@@ -15,4 +15,6 @@
 
     <string name="continueGame">Sí</string>
     <string name="notContinueGame">No</string>
+
+    <string name="imageDescription">Este marco contiene la foto de perfil de usuario</string>
 </resources>

@@ -53,7 +53,7 @@ public class PlayActivity extends AppCompatActivity {
         /**
          * This case contemplates the situation when the application has been just started.
          */
-            final SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+            final SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
             final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
             if(currentRid != -1){
 
@@ -79,8 +79,8 @@ public class PlayActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.continueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 PlayActivity.this.acumScore = currentRid;
-                                PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",-1);
-                                PlayActivity.this.currentRiddle = inGame_prefs.getInt("currentRiddle",-1);
+                                PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",0);
+                                PlayActivity.this.currentRiddle = currentRid;
 
                                 PlayActivity.this.indexes = inGame_prefs.getStringSet("prev_indexes", null);
 
@@ -123,10 +123,9 @@ public class PlayActivity extends AppCompatActivity {
         super.onPause();
 
         Bundle tempSave = new Bundle();
-
-
         int position = 0;
         String [] tempCasting = new String[10];
+
         for(String index : this.indexes) {
             tempCasting[position] = index;
             position++;
@@ -208,10 +207,7 @@ public class PlayActivity extends AppCompatActivity {
                             PlayActivity.this.bonusStreak++;
                             PlayActivity.this.currentRiddle++;
 
-                            if (PlayActivity.this.currentRiddle < PlayActivity.this.RIDDLES_PER_GAME)
-                                PlayActivity.this.drawScreen();
-                            else
-                                PlayActivity.this.endGame();
+                            PlayActivity.this.loadNextRiddle();
                         }else {
                             EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 
@@ -315,22 +311,21 @@ public class PlayActivity extends AppCompatActivity {
         /**
          * This method implements the saving of the data from the game to the local scores
          * SQLite table and removes current_riddle from the preferences in order to not detect a
-         * false started game when the user starts again to play.
+         * false started game when the user starts to play again.
          */
-        SharedPreferences game_prefs = getSharedPreferences("game_preferences", MODE_PRIVATE);
-        MyOpenHelper database = new MyOpenHelper(this);
-
-        //database.insert( User XXXX, this.acumScore);
-        database.insert(game_prefs.getString("userName", null), this.acumScore);
-
-        database.close();
-
-
-        SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
         SharedPreferences.Editor edit = inGame_prefs.edit();
 
         edit.remove("current_riddle");
         edit.apply();
+
+        SharedPreferences game_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
+        MyOpenHelper database = new MyOpenHelper(this);
+
+        //database.insert( User XXXX, this.acumScore);
+        database.insert(game_prefs.getString("userName", ""), this.acumScore);
+
+        database.close();
     }
 
     public boolean checkAnswer() {

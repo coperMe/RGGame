@@ -15,4 +15,6 @@
 
     <string name="continueGame">Yes</string>
     <string name="notContinueGame">No</string>
+
+    <string name="imageDescription">This image frame holds the user profile image</string>
 </resources>

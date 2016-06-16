@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         if(name != null && sex != null && difficulty != null) {
-            editor.putString("name", name.getText().toString());
+            editor.putString("userName", name.getText().toString());
             editor.putInt("sex", sex.getSelectedItemPosition());
             editor.putInt("difficulty", difficulty.getSelectedItemPosition());
         }

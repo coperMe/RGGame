@@ -21,16 +21,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ivUserImage"
-        android:maxHeight="60dp"
-        android:maxWidth="60dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/tvName"
-        android:layout_alignBottom="@+id/etName" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,10 +30,18 @@
         android:id="@+id/etName"
         android:textColor="@color/riddlerGreen"
         android:layout_marginBottom="10dp"
-        android:layout_below="@+id/tvName"
+        android:layout_below="@id/tvName"
         android:layout_alignParentStart="true" />
 
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivUserImage"
+        android:maxHeight="100dp"
+        android:maxWidth="60dp"
+        android:contentDescription="@string/imageDescription"
+        android:layout_alignTop="@id/tvName"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +52,7 @@
         android:textStyle="bold"
         android:textColor="@color/riddlerPurple"
         android:layout_marginBottom="20dp"
-        android:layout_below="@+id/etName"
+        android:layout_below="@id/etName"
         android:layout_alignParentStart="true" />
 
     <Spinner
@@ -62,7 +60,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/sSexSpinner"
         android:background="@color/riddlerGreen"
-        android:layout_alignBottom="@+id/ivUserImage"
         android:layout_alignParentEnd="true"
         android:entries="@array/spinnerSex"/>
 
@@ -71,12 +68,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/sDifficultySpinner"
         android:background="@color/riddlerGreen"
-        android:layout_below="@+id/etName"
-        android:layout_alignParentRight="true"
-        android:layout_alignBottom="@+id/sSexSpinner"
+        android:layout_alignTop="@id/tvDifficulty"
+        android:layout_alignBottom="@id/tvDifficulty"
+        android:layout_alignParentEnd="true"
         android:entries="@array/spinnerDifficulty" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -84,7 +81,7 @@
         android:id="@+id/tvFriendList"
         android:textStyle="bold"
         android:textColor="@color/riddlerPurple"
-        android:layout_below="@+id/tvDifficulty"
+        android:layout_below="@id/tvDifficulty"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -97,7 +94,7 @@
         android:textStyle="bold"
         android:textColor="@color/riddlerGreen"
         android:layout_below="@id/sDifficultySpinner"
-        android:layout_alignBottom="@+id/tvFriendList"
+        android:layout_alignBottom="@id/tvFriendList"
         android:layout_alignParentEnd="true"
         android:onClick="onClickAddFriendButton"/>
 
