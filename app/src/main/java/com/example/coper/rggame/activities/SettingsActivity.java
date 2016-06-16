@@ -22,6 +22,8 @@ import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.RecAdapter;
 
 import java.util.Vector;
+//facebook button
+import com.facebook.FacebookSdk;
 
 /**
  * @author David García Molino
@@ -35,6 +37,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //initialize facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_settings);
 
         recView = (RecyclerView) findViewById(R.id.rvFriendsList);
