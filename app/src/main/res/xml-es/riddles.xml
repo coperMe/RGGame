@@ -1,77 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resquizz>
     <riddle
-        riddle = "We're five little items of an everyday sort. You'll find us all in a tennis court"
+        riddle = "Somos cinco pequeñas cosas de tu día a día. Nos puedes encontrar juntas en tu portería."
         answer = "Vowels"/>
 
     <riddle
-        riddle = "¿Que es el comienzo de la eternidad      , the end of time and space,
-                  the beginning of every end and the end of every race?"
+        riddle = "¿Que es el comienzo de la eternidad, el final del presente, the beginning of every end and the end of every race?"
         answer = "Letra e"/>
 
     <riddle
-        riddle = "Cuanto mas quitas, mayor se hace. ¿Que es?"
+        riddle = "Cuanto más quitas, mayor se hace. ¿Qué es?"
         answer = "Un agujero"/>
 
     <riddle
-        riddle = "Tear one off and scratch my head, what was once red is black instead."
+        riddle = "Saca una y rasca mi cabeza. Lo que era rojo, se vuelve negro. Es mi naturaleza."
         answer = "Una cerilla"/>
 
     <riddle
-        riddle = "What is it that no man wants to have but no man want to loose?"
+        riddle = "¿Qué es lo que ninguna persona quiere tener, pero ninguna persona quiere perder?"
         answer = "Un caso judicial"/>
 
     <riddle
-        riddle = "What is it that travels on all fours in the morning,
-                  on two legs at noon, and three at twilight?"
+        riddle = "¿Qué animal anda a cuatro patas por la mañana, con dos al mediodía y con tres al atardecer?"
         answer = "Un hombre"/>
 
     <riddle
-        riddle = "If you do not know where I am, then I am something, but when you know where I am, I am nothing.
-        What am I?"
+        riddle = "Si no sabes dónde estoy, entonces soy algo, pero si sabes dónde estoy, no soy nada. ¿Qué soy?"
         answer = "Una adivinanza"/>
 
     <riddle
-        riddle = "Everything in me is ancient. What am I?"
+        riddle = "Todo lo que contengo es antiguo. ¿Qué soy?"
         answer = "Un museo"/>
 
     <riddle
-        riddle = "What starts at the top and then goes down,
-        has the ability to purify and has all the colours of the rainbow?"
+        riddle = "¿Qué comienza en la cima, va descendiendo, tiene la habilidad de purificar y contiene los colores del arcoiris?"
         answer = "Luz"/>
 
     <riddle
-        riddle = "What kind of art does Aquaman prefer?"
+        riddle = "¿Qué tipo de obras prefiere Aquaman?"
         answer = "Acuarela"/>
 
     <riddle
-        riddle = "It is nowhere, but it's everywhere except if something is. What is it?"
+        riddle = "No está en ningún lugar, excepto donde nada está. ¿Qué es?"
         answer = "Nada"/>
 
     <riddle
-        riddle = "What is strong enough to smash ships but still fears the sun?"
+        riddle = "¿Qué es suficientemente fuerte para hundir un barco y, aun así, teme la luz del sol?"
         answer = "Hielo"/>
 
     <riddle
-        riddle = "The poor have, the rich need it and if you eat it you'll die"
+        riddle = "El pobre lo tiene, el rico lo necesita y si lo comes, morirás"
         answer = "Nada"/>
 
     <riddle
-        riddle = "Si me conoces, quieres compartirme. Pero si me compartes, desaparezco. ¿Que soy?"
+        riddle = "Si me conoces, quieres compartirme. Pero si me compartes, desaparezco. ¿Qué soy?"
         answer = "Un secreto"/>
 
     <riddle
-        riddle = "Estaré justo bajo tus pies con el sol de medio día;
-        no puedes deshacerte de mí, no importa cuánto corras"
+        riddle = "Estaré justo bajo tus pies con el sol de medio día; no podrás deshacerte de mí, sin importar cuánto corras."
         answer = "Sombra"/>
 
     <riddle
-        riddle = "The more there is, the less you see. What could I be?"
+        riddle = "Cuanto más hay, menos ves. ¿Qué puede ser?"
         answer = "Oscuridad"/>
 
     <riddle
-        riddle = "Hit me hard and I will crack but you'll never stop me from staring back.
-        What am I?"
+        riddle = "Golpéame fuere y me quebrarás, pero nunca que te devuelva la mirada evitarás. ¿Qué soy?"
         answer = "Un espejo"/>
 
 </resquizz>

@@ -9,6 +9,7 @@
 
     <string name="tvName">Nombre:</string>
     <string name="etName">Introduce tu nombre aquí:</string>
+    <string name="tvHeroine">¿Que eres tu?</string>
     <string name="tvDifficulty">Dificultad:</string>
     <string name="tvFriendList">Lista de amigos:</string>
     <string name="bAddFriend">Añadir amigo</string>

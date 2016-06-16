@@ -2,6 +2,8 @@ package com.example.coper.rggame.activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.coper.rggame.POJO.Difficulty;
 import com.example.coper.rggame.POJO.Scoring;
+import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.RecAdapter;
 
@@ -35,18 +39,30 @@ public class SettingsActivity extends AppCompatActivity {
         recView = (RecyclerView) findViewById(R.id.rvFriendsList);
 
         EditText name = (EditText) findViewById(R.id.etName);
+        ImageView profileImage = (ImageView) findViewById(R.id.ivUserImage);
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
         Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
 
         if(savedInstanceState == null){
             SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
 
-            if(difficulty != null && name != null && sex != null) {
+            if(difficulty != null && name != null && sex != null && profileImage != null) {
                 difficulty.setSelection(Difficulty.Medium.ordinal());
 
                 name.setText(preferences.getString("name",""));
+
                 difficulty.setSelection(preferences.getInt("difficulty", Difficulty.Medium.ordinal()));
                 sex.setSelection(preferences.getInt("sex", 0));
+                Bitmap image;
+
+                if(sex.getSelectedItemPosition() == Sex.Woman.ordinal())
+                    image = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                                                         R.drawable.ui_default_batgirl);
+                else
+                    image = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                                                         R.drawable.ui_default_batman);;
+
+                profileImage.setImageBitmap(image);
             }
 
             recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
