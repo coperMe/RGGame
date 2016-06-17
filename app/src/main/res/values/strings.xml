@@ -17,6 +17,8 @@
     <string name="continueGame">Yes</string>
     <string name="notContinueGame">No</string>
 
+    <string name="wrongAnswer">So (...,&#8230;) You are not as brilliant as you thought, huh?</string>
+
     <string name="imageDescription">This image frame holds the user profile image</string>
     <string name="facebook_app_id">303033563372753</string>
 </resources>

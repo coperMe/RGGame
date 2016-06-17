@@ -37,8 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //initialize facebook sdk
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         setContentView(R.layout.activity_settings);
 
         recView = (RecyclerView) findViewById(R.id.rvFriendsList);
@@ -47,8 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
         ImageView profileImage = (ImageView) findViewById(R.id.ivUserImage);
         Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
         Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
-
-
 
         if(savedInstanceState == null){
             Bitmap image;
@@ -70,7 +70,6 @@ public class SettingsActivity extends AppCompatActivity {
                     this.imageId = R.drawable.ui_default_batman;
                     image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
                                                           this.imageId);
-
                 }
 
                 profileImage.setImageBitmap(image);
@@ -112,10 +111,11 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        if(name != null && sex != null && difficulty != null) {
+        if(name != null && sex != null && difficulty != null && profile != null) {
             editor.putString("userName", name.getText().toString());
             editor.putInt("sex", sex.getSelectedItemPosition());
             editor.putInt("difficulty", difficulty.getSelectedItemPosition());
+            editor.putInt("profileImage", this.imageId);
         }
 
         editor.apply();

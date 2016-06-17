@@ -3,11 +3,13 @@ package com.example.coper.rggame.activities;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DialogTitle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.ArraySet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,8 +24,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -36,7 +41,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private final int RIDDLES_PER_GAME = 10;
     private Vector<Riddle> riddleList = null;
-    private Set<String> indexes;
+    private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
 
 
@@ -45,14 +50,16 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        this.initIndexes();
         this.setupAnswerField();
         this.fillRiddleVector();
-        this.initIndexes();
 
         if(savedInstanceState == null) {
         /**
          * This case contemplates the situation when the application has been just started.
          */
+            findViewById(R.id.background).getBackground().setAlpha(200);
+
             final SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
             final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
             if(currentRid != -1){
@@ -82,7 +89,12 @@ public class PlayActivity extends AppCompatActivity {
                                 PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",0);
                                 PlayActivity.this.currentRiddle = currentRid;
 
-                                PlayActivity.this.indexes = inGame_prefs.getStringSet("prev_indexes", null);
+                                Set<String> saved = inGame_prefs.getStringSet("prev_indexes", new HashSet<String>());
+                                int position = 0;
+                                for(String index : saved) {
+                                        PlayActivity.this.indexes[position] = Integer.valueOf(index);
+                                        position++;
+                                }
 
                                 dialog.dismiss();
                             }
@@ -106,13 +118,20 @@ public class PlayActivity extends AppCompatActivity {
              * started and the user have changed the focus on the app or the orientation of the
              * screen.
              */
-            String []savedIndexes = savedInstanceState.getStringArray("indexes");
-            this.currentRiddle = savedInstanceState.getInt("current");
-            this.bonusStreak = savedInstanceState.getInt("bonus");
-            this.acumScore = savedInstanceState .getInt("score");
-            this.indexes = new HashSet<String>();
-            if(savedIndexes != null)
-                this.indexes.addAll(Arrays.asList(savedIndexes));
+            this.acumScore = savedInstanceState .getInt("score", 0);
+            this.bonusStreak = savedInstanceState.getInt("bonus", 0);
+            int []recovered = savedInstanceState.getIntArray("indexes");
+            //this.indexes = Arrays.copyOf(recovered, RIDDLES_PER_GAME);
+
+            if(recovered != null) {
+                int position = 0;
+                for (int index : recovered) {
+                    this.indexes[position] = index;
+                    position++;
+                }
+            }
+
+            this.currentRiddle = savedInstanceState.getInt("current", 0);
         }
 
         this.playGame();
@@ -123,40 +142,35 @@ public class PlayActivity extends AppCompatActivity {
         super.onPause();
 
         Bundle tempSave = new Bundle();
-        int position = 0;
-        String [] tempCasting = new String[10];
 
-        for(String index : this.indexes) {
-            tempCasting[position] = index;
-            position++;
-        }
-
-        tempSave.putStringArray("indexes", tempCasting);
-        tempSave.putInt("current", this.currentRiddle);
-        tempSave.putInt("bonus", this.bonusStreak);
         tempSave.putInt("score", this.acumScore);
+        tempSave.putInt("bonus", this.bonusStreak);
+        tempSave.putIntArray("indexes", this.indexes);
+        tempSave.putInt("current", this.currentRiddle);
 
-        SharedPreferences inGame_prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = inGame_prefs.edit();
 
-        prefsEditor.putInt("currentRiddle", this.currentRiddle);
-        prefsEditor.putInt("bonusStreak", this.bonusStreak);
+        Set<String> prev_indexes = new HashSet<String>(RIDDLES_PER_GAME);
+        for(int i = 0; i < RIDDLES_PER_GAME; i++)
+            prev_indexes.add(Integer.toString(this.indexes[i]));
+
         prefsEditor.putInt("score", this.acumScore);
-        prefsEditor.putStringSet("prev_indexes", this.indexes);
+        prefsEditor.putInt("bonusStreak", this.bonusStreak);
+        prefsEditor.putStringSet("prev_indexes", prev_indexes);
+        prefsEditor.putInt("currentRiddle", this.currentRiddle);
 
         prefsEditor.apply();
     }
 
     private void initIndexes() {
-        this.indexes = new HashSet<String>();
-        int position = 0;
+        this.indexes = new int[RIDDLES_PER_GAME];
 
-        while(position < this.RIDDLES_PER_GAME){
+        for(int i = 0; i < this.RIDDLES_PER_GAME; i++){
             Random random = new Random();
             int randTaken = random.nextInt(this.riddleList.size());
-            if (!this.indexes.contains(String.valueOf(randTaken))) {
-                this.indexes.add(String.valueOf(randTaken));
-                position++;
+            if (!this.indexContained(i, randTaken)) {
+                this.indexes[i] = randTaken;
             }
         }
     }
@@ -213,7 +227,7 @@ public class PlayActivity extends AppCompatActivity {
 
                             PlayActivity.this.bonusStreak = 0;
                             if(etAnswer != null)
-                                etAnswer.setError("So... You are not as brilliant as you thought, huh?");
+                                etAnswer.setError(getResources().getString(R.string.wrongAnswer));
                         }
 
                         return true;
@@ -233,17 +247,7 @@ public class PlayActivity extends AppCompatActivity {
 
         if(riddle != null && answer != null && score != null) {
             score.setText(String.valueOf(this.acumScore));
-
-            String [] tempCasting = new String[10];
-            int position = 0;
-
-            for(String currentIndex : this.indexes) {
-                tempCasting[position] = currentIndex;
-                position++;
-            }
-
-            String currRiddle = this.riddleList.get(Integer.parseInt(tempCasting[this.currentRiddle])).getRiddle();
-            riddle.setText(currRiddle);
+            riddle.setText(this.riddleList.get(this.indexes[this.currentRiddle]).getRiddle());
             answer.setText("");
         }
     }
@@ -332,14 +336,8 @@ public class PlayActivity extends AppCompatActivity {
         EditText answerField = (EditText) findViewById(R.id.etAnswer);
 
         String proposedAnswer = "";
-        String [] tempCasting = new String[10];
-        int position = 0;
-        for(String index : this.indexes) {
-            tempCasting[position] = index;
-            position++;
-        }
 
-        String realAnswer = this.riddleList.get(Integer.valueOf(tempCasting[this.currentRiddle])).getAnswer();
+        String realAnswer = this.riddleList.get(this.indexes[this.currentRiddle]).getAnswer();
 
         if(answerField!=null)
             proposedAnswer = answerField.getText().toString();
@@ -347,4 +345,11 @@ public class PlayActivity extends AppCompatActivity {
         return (realAnswer.compareToIgnoreCase(proposedAnswer) == 0);
     }
 
+    private boolean indexContained(int currentPos, int candidateIndex){
+        for(int i = 0; i <= currentPos; i++)
+            if(this.indexes[i] == candidateIndex)
+                return true;
+
+        return false;
+    }
 }
