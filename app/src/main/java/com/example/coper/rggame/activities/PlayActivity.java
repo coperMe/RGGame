@@ -2,6 +2,7 @@ package com.example.coper.rggame.activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.coper.rggame.POJO.Riddle;
+import com.example.coper.rggame.POJO.Sex;
+import com.example.coper.rggame.POJO.User;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.MyOpenHelper;
 
@@ -44,21 +47,23 @@ public class PlayActivity extends AppCompatActivity {
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        this.initIndexes();
+        View layout = findViewById(R.id.background);
+        if(layout != null)
+                layout.getBackground().setAlpha(180);
+
         this.setupAnswerField();
         this.fillRiddleVector();
+        this.initIndexes();
 
         if(savedInstanceState == null) {
         /**
          * This case contemplates the situation when the application has been just started.
          */
-            findViewById(R.id.background).getBackground().setAlpha(200);
 
             final SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
             final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
@@ -68,11 +73,11 @@ public class PlayActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
                 // set title
-                alertDialogBuilder.setTitle("Continue game");
+                alertDialogBuilder.setTitle(getResources().getString(R.string.continueGameTitle));
 
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("A previous game has been detected. Dou you want to continue?")
+                        .setMessage(getResources().getString(R.string.continueGameMessage))
                         .setCancelable(false)
                         .setNegativeButton(R.string.notContinueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -120,18 +125,20 @@ public class PlayActivity extends AppCompatActivity {
              */
             this.acumScore = savedInstanceState .getInt("score", 0);
             this.bonusStreak = savedInstanceState.getInt("bonus", 0);
-            int []recovered = savedInstanceState.getIntArray("indexes");
-            //this.indexes = Arrays.copyOf(recovered, RIDDLES_PER_GAME);
+            // Problem detected: NO GOOD RECOVERY OF THE INDEXES ARRAY
+            int []recovered = savedInstanceState.getIntArray("prev_indexes");
+            this.currentRiddle = savedInstanceState.getInt("currentRiddle", 0);
 
             if(recovered != null) {
+                this.indexes = recovered.clone();
+                /*
                 int position = 0;
                 for (int index : recovered) {
                     this.indexes[position] = index;
                     position++;
                 }
+                */
             }
-
-            this.currentRiddle = savedInstanceState.getInt("current", 0);
         }
 
         this.playGame();
@@ -145,7 +152,7 @@ public class PlayActivity extends AppCompatActivity {
 
         tempSave.putInt("score", this.acumScore);
         tempSave.putInt("bonus", this.bonusStreak);
-        tempSave.putIntArray("indexes", this.indexes);
+        tempSave.putIntArray("prev_indexes", this.indexes);
         tempSave.putInt("current", this.currentRiddle);
 
         SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
@@ -163,6 +170,24 @@ public class PlayActivity extends AppCompatActivity {
         prefsEditor.apply();
     }
 
+    private void playGame() {
+
+        this.drawScreen();
+
+    }
+
+    private void drawScreen() {
+        TextView riddle = (TextView) findViewById(R.id.tvRiddle);
+        TextView score = (TextView) findViewById(R.id.acumulatedScore);
+        EditText answer = (EditText) findViewById(R.id.etAnswer);
+
+        if(riddle != null && answer != null && score != null) {
+            score.setText(String.valueOf(this.acumScore));
+            riddle.setText(this.riddleList.get(this.indexes[this.currentRiddle]).getRiddle());
+            answer.setText("");
+        }
+    }
+
     private void initIndexes() {
         this.indexes = new int[RIDDLES_PER_GAME];
 
@@ -173,12 +198,6 @@ public class PlayActivity extends AppCompatActivity {
                 this.indexes[i] = randTaken;
             }
         }
-    }
-
-    private void playGame() {
-
-        this.drawScreen();
-
     }
 
     private void setupAnswerField(){
@@ -240,18 +259,6 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    private void drawScreen() {
-        TextView riddle = (TextView) findViewById(R.id.tvRiddle);
-        TextView score = (TextView) findViewById(R.id.acumulatedScore);
-        EditText answer = (EditText) findViewById(R.id.etAnswer);
-
-        if(riddle != null && answer != null && score != null) {
-            score.setText(String.valueOf(this.acumScore));
-            riddle.setText(this.riddleList.get(this.indexes[this.currentRiddle]).getRiddle());
-            answer.setText("");
-        }
-    }
-
     public void fillRiddleVector() {
         /**
          / The implementation recovers the indexes stored at the String array from
@@ -281,25 +288,25 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickSolveButton(View v) {
-        /**
-         * This listener checks the answer and when it is right, it refreshes the screen with the
-         * following riddle (if possible). When it checks the answer and it is wrong, it sets an
-         * error message linked to the answer field.
-         */
-        EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
+    private boolean indexContained(int currentPos, int candidateIndex){
+        for(int i = 0; i <= currentPos; i++)
+            if(this.indexes[i] == candidateIndex)
+                return true;
 
-        if (this.checkAnswer()) {
-            this.acumScore += 25 + 50*this.bonusStreak;
-            this.bonusStreak++;
-            this.currentRiddle++;
+        return false;
+    }
 
-            this.loadNextRiddle();
+    public boolean checkAnswer() {
+        EditText answerField = (EditText) findViewById(R.id.etAnswer);
 
-        } else if(etAnswer!=null) {
-            this.bonusStreak = 0;
-            etAnswer.setError("So... You are not as brilliant as you thought, huh?");
-        }
+        String proposedAnswer = "";
+
+        String realAnswer = this.riddleList.get(this.indexes[this.currentRiddle]).getAnswer();
+
+        if(answerField!=null)
+            proposedAnswer = answerField.getText().toString();
+
+        return (realAnswer.compareToIgnoreCase(proposedAnswer) == 0);
     }
 
     private void loadNextRiddle(){
@@ -326,30 +333,43 @@ public class PlayActivity extends AppCompatActivity {
         SharedPreferences game_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
         MyOpenHelper database = new MyOpenHelper(this);
 
-        //database.insert( User XXXX, this.acumScore);
-        database.insert(game_prefs.getString("userName", ""), this.acumScore);
+        User recording = new User();
+        int imageId;
+        if (game_prefs.getInt("sex", 0) == Sex.Woman.ordinal())
+            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batgirl);
+        else
+            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batman);
 
+        recording.setName(game_prefs.getString("userName", game_prefs.getString("name", "")));
+        recording.setProfilePic(BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                                                              imageId ));
+
+        database.insert( recording, this.acumScore );
+        /*
+        database.insert( game_prefs.getString("userName", game_prefs.getString("name", "")),
+                         this.acumScore );
+        */
         database.close();
     }
 
-    public boolean checkAnswer() {
-        EditText answerField = (EditText) findViewById(R.id.etAnswer);
+    public void onClickSolveButton(View v) {
+        /**
+         * This listener checks the answer and when it is right, it refreshes the screen with the
+         * following riddle (if possible). When it checks the answer and it is wrong, it sets an
+         * error message linked to the answer field.
+         */
+        EditText etAnswer = (EditText) findViewById(R.id.etAnswer);
 
-        String proposedAnswer = "";
+        if (this.checkAnswer()) {
+            this.acumScore += 25 + 50*this.bonusStreak;
+            this.bonusStreak++;
+            this.currentRiddle++;
 
-        String realAnswer = this.riddleList.get(this.indexes[this.currentRiddle]).getAnswer();
+            this.loadNextRiddle();
 
-        if(answerField!=null)
-            proposedAnswer = answerField.getText().toString();
-
-        return (realAnswer.compareToIgnoreCase(proposedAnswer) == 0);
-    }
-
-    private boolean indexContained(int currentPos, int candidateIndex){
-        for(int i = 0; i <= currentPos; i++)
-            if(this.indexes[i] == candidateIndex)
-                return true;
-
-        return false;
+        } else if(etAnswer!=null) {
+            this.bonusStreak = 0;
+            etAnswer.setError("So... You are not as brilliant as you thought, huh?");
+        }
     }
 }

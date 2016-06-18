@@ -14,6 +14,8 @@
     <string name="tvFriendList">Friends list:</string>
     <string name="bAddFriend">Add friend</string>
 
+    <string name="continueGameTitle">Continue game</string>
+    <string name="continueGameMessage">"A previous game has been detected. Dou you want to continue?"</string>
     <string name="continueGame">Yes</string>
     <string name="notContinueGame">No</string>
 

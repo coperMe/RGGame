@@ -14,6 +14,8 @@
     <string name="tvFriendList">Lista de amigos:</string>
     <string name="bAddFriend">Añadir amigo</string>
 
+    <string name="continueGameTitle">Continuar partida</string>
+    <string name="continueGameMessage">Se ha detectado una partida previa. ¿Deseas continuar?</string>
     <string name="continueGame">Sí</string>
     <string name="notContinueGame">No</string>
 

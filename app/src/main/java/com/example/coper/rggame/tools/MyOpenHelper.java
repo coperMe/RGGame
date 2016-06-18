@@ -12,6 +12,7 @@ import com.example.coper.rggame.POJO.Scoring;
 import com.example.coper.rggame.POJO.User;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Blob;
 import java.util.Vector;
 
 /**
@@ -46,17 +47,42 @@ public class MyOpenHelper extends SQLiteOpenHelper {
     }
 
     public void insert(User user, int score){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         SQLiteDatabase database = getWritableDatabase();
 
-        Cursor cursor = database.rawQuery("SELECT userId, scoreId " +
-                                          "FROM Users, Scores " +
+        user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
+
+        Cursor cursor = database.rawQuery("SELECT userId" +
+                                          "FROM Users" +
                                           "WHERE name = " + user.getName(), null);
-        cursor.moveToFirst();
-        database.execSQL("INSERT INTO Scores " +
-                         "VALUES ( null, " +
-                                   cursor.getInt(1) + ", " +
-                                   cursor.getInt(0) + ", " +
-                                   score +")");
+        if(cursor.moveToFirst())
+            database.execSQL("INSERT INTO Scores " +
+                             "VALUES ( null, " +
+                                       cursor.getInt(0) + ", " +
+                                       score + ")");
+        else {
+            ContentValues parameters = new ContentValues();
+
+            parameters.put("image", stream.toByteArray());
+            parameters.put("name", user.getName());
+
+            database.insert("Users", null, parameters);
+            /*
+            database.execSQL("INSERT INTO Users " +
+                                "VALUES ( null, " +
+                                stream.toByteArray() + ", " +
+                                user.getName() + ")");
+            */
+            cursor = database.rawQuery( "SELECT userId,  " +
+                    "FROM Users" +
+                    "WHERE name = " + user.getName(), null);
+
+            database.execSQL( "INSERT INTO Scores " +
+                              "VALUES ( null, " +
+                              cursor.getInt(0) + ", " +
+                              score + ")" );
+
+        }
 
         cursor.close();
         database.close();

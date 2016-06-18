@@ -1,5 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/black"
+    tools:context=".activities.SettingsActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tvName"
+        android:id="@+id/tvName"
+        android:textStyle="bold"
+        android:textColor="@color/riddlerPurple"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivUserImage"
+        android:maxHeight="100dp"
+        android:maxWidth="60dp"
+        android:contentDescription="@string/imageDescription"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tvFriendList"
+        android:id="@+id/tvFriendList"
+        android:textStyle="bold"
+        android:textColor="@color/riddlerPurple"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <!--
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
+    -->
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bAddFriend"
+        android:id="@+id/bAddFriend"
+        android:background="@android:color/black"
+        android:textStyle="bold"
+        android:textColor="@color/riddlerGreen"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClickAddFriendButton"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/etName"
+        android:ems="10"
+        android:id="@+id/etName"
+        android:textColor="@color/riddlerGreen"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/tvName"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tvHeroine"
+        android:textColor="@color/riddlerPurple"
+        android:id="@+id/tvHeroine"
+        android:textStyle="bold"
+        android:layout_below="@id/ivUserImage"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sSexSpinner"
+        android:background="@color/riddlerGreen"
+        android:entries="@array/spinnerSex"
+        android:layout_below="@id/ivUserImage"
+        android:layout_alignStart="@id/bAddFriend"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tvDifficulty"
+        android:id="@+id/tvDifficulty"
+        android:textStyle="bold"
+        android:textColor="@color/riddlerPurple"
+        android:layout_above="@id/tvFriendList"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sDifficultySpinner"
+        android:background="@color/riddlerGreen"
+        android:layout_alignParentEnd="true"
+        android:entries="@array/spinnerDifficulty"
+        android:layout_toEndOf="@+id/tvFriendList"
+        android:layout_above="@+id/tvFriendList"
+        android:layout_alignTop="@+id/tvDifficulty"
+        android:layout_alignStart="@+id/bAddFriend" />
+
+    <android.support.v7.widget.ContentFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/riddlerPurple"
+        android:alpha="0.5"
+        android:id="@+id/frameLayout"
+        android:layout_below="@+id/tvFriendList">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvFriendsList">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.ContentFrameLayout>
 
 </RelativeLayout>
