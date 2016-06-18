@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -52,9 +53,9 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
         user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
 
-        Cursor cursor = database.rawQuery("SELECT userId" +
-                                          "FROM Users" +
-                                          "WHERE name = " + user.getName(), null);
+        Cursor cursor = database.rawQuery("SELECT userId " +
+                "FROM Users " +
+                "WHERE name = '" + user.getName() + "'", null);
         if(cursor.moveToFirst())
             database.execSQL("INSERT INTO Scores " +
                              "VALUES ( null, " +
@@ -63,23 +64,35 @@ public class MyOpenHelper extends SQLiteOpenHelper {
         else {
             ContentValues parameters = new ContentValues();
 
+            String username = user.getName();
+
+            //much better when have 1 autoincrement key
+            String sql = "INSERT INTO Users (profileImage, name) VALUES(?,?)";
+            SQLiteStatement insertStmt = database.compileStatement(sql);
+            insertStmt.clearBindings();
+            insertStmt.bindBlob(1, stream.toByteArray());
+            insertStmt.bindString(2, username);
+            insertStmt.executeInsert();
+
+
+           /*
             parameters.put("image", stream.toByteArray());
             parameters.put("name", user.getName());
 
-            database.insert("Users", null, parameters);
+            database.insert("Users", null, parameters);*/
             /*
             database.execSQL("INSERT INTO Users " +
                                 "VALUES ( null, " +
                                 stream.toByteArray() + ", " +
                                 user.getName() + ")");
             */
-            cursor = database.rawQuery( "SELECT userId,  " +
-                    "FROM Users" +
-                    "WHERE name = " + user.getName(), null);
+            /*cursor = database.rawQuery( "SELECT userId " +
+                    "FROM Users " +
+                    "WHERE name = '" + user.getName()+"'", null);*/
 
             database.execSQL( "INSERT INTO Scores " +
-                              "VALUES ( null, " +
-                              cursor.getInt(0) + ", " +
+                    "VALUES ( null, '" +
+                    username + "', " +
                               score + ")" );
 
         }
