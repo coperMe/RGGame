@@ -50,4 +50,8 @@ public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
 
     }
 
+    public String getItem (int id){
+        return highScores.elementAt(id).getUser().getName();
+    }
+
 }

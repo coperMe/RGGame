@@ -4,14 +4,18 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.example.coper.rggame.POJO.Difficulty;
@@ -20,6 +24,14 @@ import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.RecAdapter;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Vector;
 //facebook button
 import com.facebook.FacebookSdk;
@@ -70,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 profileImage.setImageBitmap(image);
             }
+
 
             recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
             recView.setLayoutManager(new LinearLayoutManager(this));
@@ -145,5 +158,36 @@ public class SettingsActivity extends AppCompatActivity {
 
         // show it
         alertDialog.show();
+    }
+
+    private void addFriendInServer (String friendName) throws IOException {
+        SharedPreferences prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http");
+        builder.authority("wwtbamandroid.appspot.com");
+        builder.appendPath("rest/highscores");
+
+        URL destination = null;
+        try {
+            destination = new URL(builder.build().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        String coding = "UTF-8";
+
+        String params =
+                URLEncoder.encode("name", coding) + "=" +
+                URLEncoder.encode(prefs.getString("name", ""), coding) + "&" +
+                URLEncoder.encode("friend_name", coding) + "=" +
+                URLEncoder.encode(friendName,coding);
+        OutputStream stream = connection.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, "UTF-8"));
+        writer.write(params);
+        writer.flush();
+        writer.close();
+        stream.close();
     }
 }

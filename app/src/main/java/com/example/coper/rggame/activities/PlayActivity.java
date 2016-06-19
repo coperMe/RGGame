@@ -1,16 +1,13 @@
 package com.example.coper.rggame.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.ArraySet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,20 +16,13 @@ import android.widget.TextView;
 
 import com.example.coper.rggame.POJO.Difficulty;
 import com.example.coper.rggame.POJO.Riddle;
-import com.example.coper.rggame.POJO.Sex;
-import com.example.coper.rggame.POJO.User;
 import com.example.coper.rggame.R;
-import com.example.coper.rggame.tools.MyOpenHelper;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -43,7 +33,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final int RIDDLES_PER_GAME = 1;
+    private final int RIDDLES_PER_GAME = 10;
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
@@ -173,6 +163,8 @@ public class PlayActivity extends AppCompatActivity {
         prefsEditor.putInt("currentRiddle", this.currentRiddle);
 
         prefsEditor.apply();
+
+        setResult(Activity.RESULT_CANCELED);
     }
 
     private void playGame() {
@@ -347,27 +339,9 @@ public class PlayActivity extends AppCompatActivity {
         edit.putInt("score", this.acumScore);
         edit.apply();
 
+        setResult(Activity.RESULT_OK);
+
         this.finish();
-        /*
-        edit.remove("current_riddle");
-        edit.putInt("score", this.acumScore);
-        edit.apply();
-
-        SharedPreferences game_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
-        MyOpenHelper database = new MyOpenHelper(this);
-
-        User recording = new User();
-        int imageId;
-        if (game_prefs.getInt("sex", 0) == Sex.Woman.ordinal())
-            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batgirl);
-        else
-            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batman);
-
-        recording.setName(game_prefs.getString("userName", game_prefs.getString("name", "")));
-        recording.setProfilePic(BitmapFactory.decodeResource( getApplicationContext().getResources(),
-                                                              imageId ));
-
-        database.insert( recording, this.acumScore );*/
     }
 
     public void onClickSolveButton(View v) {
