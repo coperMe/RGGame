@@ -48,60 +48,6 @@ public class MyOpenHelper extends SQLiteOpenHelper {
     }
 
     public void insert(User user, int score){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        SQLiteDatabase database = getWritableDatabase();
-
-        user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
-
-        Cursor cursor = database.rawQuery("SELECT userId " +
-                "FROM Users " +
-                "WHERE name = '" + user.getName() + "'", null);
-        if(cursor.moveToFirst())
-            database.execSQL("INSERT INTO Scores " +
-                             "VALUES ( null, " +
-                                       cursor.getInt(0) + ", " +
-                                       score + ")");
-        else {
-            ContentValues parameters = new ContentValues();
-
-            String username = user.getName();
-
-            //much better when have 1 autoincrement key
-            String sql = "INSERT INTO Users (profileImage, name) VALUES(?,?)";
-            SQLiteStatement insertStmt = database.compileStatement(sql);
-            insertStmt.clearBindings();
-            insertStmt.bindBlob(1, stream.toByteArray());
-            insertStmt.bindString(2, username);
-            insertStmt.executeInsert();
-
-
-           /*
-            parameters.put("image", stream.toByteArray());
-            parameters.put("name", user.getName());
-
-            database.insert("Users", null, parameters);*/
-            /*
-            database.execSQL("INSERT INTO Users " +
-                                "VALUES ( null, " +
-                                stream.toByteArray() + ", " +
-                                user.getName() + ")");
-            */
-            /*cursor = database.rawQuery( "SELECT userId " +
-                    "FROM Users " +
-                    "WHERE name = '" + user.getName()+"'", null);*/
-
-            database.execSQL( "INSERT INTO Scores " +
-                    "VALUES ( null, '" +
-                    username + "', " +
-                              score + ")" );
-
-        }
-
-        cursor.close();
-        database.close();
-    }
-
-    public void insert(String username, int score){
         /**
          * This method checks two possible scenarios.
          * The first one is that the username that we get as a parameter already exists in our
@@ -111,77 +57,59 @@ public class MyOpenHelper extends SQLiteOpenHelper {
          * database. In this case, we put this new user in the database and then, we recover the
          * userId and we insert the score.
          */
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         SQLiteDatabase database = getWritableDatabase();
 
-        ContentValues userInsertion = new ContentValues();
-        ContentValues scoresInsertion = new ContentValues();
+        user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
 
-        Cursor cursor = database.rawQuery( "SELECT userId " +
-                                           "FROM Users " +
-                                           "WHERE name = " + username, null);
-
-        if ( cursor.moveToFirst() ) {
-            scoresInsertion.put("userId", cursor.getInt(0));
-            scoresInsertion.put("score", score);
-            database.insert(getDatabaseName(), null, userInsertion);
-            /*
-            database.execSQL( "INSERT INTO Scores " +
-                              "VALUES ( null, " +
-                              cursor.getInt(0) + ", " +
-                              score + ")" );
-            */
-        } else {
-            /// TODO (the part of adding the userProfile image is missing)
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            String imagePath = "";
-            Bitmap image  = BitmapFactory.decodeFile(imagePath);
-
-            //image.compress(Bitmap.CompressFormat.PNG, 0, stream);
-
-            //byte [] imageByted = stream.toByteArray();
-            /*
-            byte [] imageByted = new byte[1];
-
-            userInsertion.put("profileImage", imageByted);
-            userInsertion.put("name", username);
-            database.insert("Users", null, userInsertion);
-            */
-            /*
-            database.execSQL("INSERT INTO Users" +
-                    "VALUES ( null, " +
-                    stream.toByteArray().toString() + ", " +
-                    username + ")");
-            */
-            /*
-            cursor = database.rawQuery( "SELECT userId " +
-                                        "FROM Users " +
-                                        "WHERE name = " + username, null );
-
-            scoresInsertion.put("userId", cursor.getInt(0));
-            scoresInsertion.put("score", score);
-            database.insert("Scores", null, scoresInsertion);
-            */
-            /*
+        Cursor directInsertion = database.rawQuery("SELECT userId " +
+                "FROM Users " +
+                "WHERE name = '" + user.getName() + "'", null);
+        if(directInsertion.moveToFirst())
             database.execSQL("INSERT INTO Scores " +
                              "VALUES ( null, " +
-                                       cursor.getInt(0) + ", " +
-                                       score +")");
+                                       directInsertion.getInt(0) + ", " +
+                                       score + ")");
+        else {
+            directInsertion.close();
+
+            String sqlUsers = "INSERT INTO Users (profileImage, name) VALUES(?,?)";
+            SQLiteStatement insertStmt = database.compileStatement(sqlUsers);
+            insertStmt.clearBindings();
+            insertStmt.bindBlob(1, stream.toByteArray());
+            insertStmt.bindString(2, user.getName());
+            insertStmt.executeInsert();
+
+            Cursor indirectInsertion = database.rawQuery( "SELECT userId " +
+                                                          "FROM Users " +
+                                                          "WHERE name = '" + user.getName()+"'", null );
+
+            String sqlScores = "INSERT INTO Scores (userId, score) VALUES(?,?)";
+            SQLiteStatement insertScores = database.compileStatement(sqlScores);
+            insertScores.clearBindings();
+            insertScores.bindLong(1, indirectInsertion.getInt(0));
+            insertScores.bindLong(2, score);
+            insertScores.executeInsert();
+            /*
+            database.execSQL( "INSERT INTO Scores " +
+                    "VALUES ( null, '" +
+                              indirectInsertion.getInt(0) + "', " +
+                              score + ")" );
             */
+            indirectInsertion.close();
         }
 
-        cursor.close();
         database.close();
     }
-
 
     public Vector<Scoring> extractAll() {
         Vector<Scoring> recovered = new Vector<Scoring>();
         SQLiteDatabase database = getReadableDatabase();
 
         Cursor cursor = database.rawQuery("SELECT profileImage, name, score " +
-                "FROM Users u INNER JOIN Scores s " +
-                "ON u.userId = s.userId", null);
+                                          "FROM Users u INNER JOIN Scores s " +
+                                          "ON u.userId = s.userId", null);
 
         if (cursor.moveToFirst()){
             do {
@@ -190,18 +118,15 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
                 recovered.add(new Scoring(new User( image,
                                                     cursor.getString(1)),
-                                          cursor.getInt(2)));
+                                                    cursor.getInt(2)));
             } while (cursor.moveToNext());
 
             cursor.close();
             database.close();
 
             return recovered;
-        }else {
-            cursor.close();
-            database.close();
-
-            return new Vector<Scoring>();
         }
+
+        return recovered;
     }
 }

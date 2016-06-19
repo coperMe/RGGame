@@ -42,7 +42,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final int RIDDLES_PER_GAME = 10;
+    private final int RIDDLES_PER_GAME = 1;
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
@@ -345,11 +345,6 @@ public class PlayActivity extends AppCompatActivity {
                                                               imageId ));
 
         database.insert( recording, this.acumScore );
-        /*
-        database.insert( game_prefs.getString("userName", game_prefs.getString("name", "")),
-                         this.acumScore );
-        */
-        database.close();
     }
 
     public void onClickSolveButton(View v) {
