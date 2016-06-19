@@ -19,8 +19,14 @@
     <string name="continueGame">Yes</string>
     <string name="notContinueGame">No</string>
 
-    <string name="wrongAnswer">So (...,&#8230;) You are not as brilliant as you thought, huh?</string>
+    <string name="wrongAnswer">So&#8230; You are not as brilliant as you thought, huh?</string>
 
     <string name="imageDescription">This image frame holds the user profile image</string>
     <string name="facebook_app_id">303033563372753</string>
+
+    <string name="congratsTitle">Congratulations!</string>
+    <string name="congratsMessage">You have beaten me this time, but it will not be always like this.</string>
+
+    <string name="failTitle">Better luck next time, little bat!</string>
+    <string name="failMessage">You have get this far&#8230; I am very impressed, I did not expected less from you. Nothing more, either</string>
 </resources>

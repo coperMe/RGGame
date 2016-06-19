@@ -2,13 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coper.rggame">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-                     android:maxSdkVersion="18"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-    <uses-feature android:name="android.hardware.camera2"
-                  android:required="false" />
-    <!-- required for facebook sdk-->
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
+    <!-- required for facebook sdk -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -28,18 +31,22 @@
             android:name=".activities.PlayActivity"
             android:parentActivityName=".activities.MenuActivity" />
         <activity
+            android:name=".activities.SummaryActivity"
+            android:parentActivityName=".activities.MenuActivity"/>
+        <activity
             android:name=".activities.ScoresActivity"
             android:parentActivityName=".activities.MenuActivity" />
         <activity
             android:name=".activities.SettingsActivity"
             android:parentActivityName=".activities.MenuActivity" />
         <activity android:name=".activities.LoadingActivity" />
-        <!-- facebook sdk-->
+        <!-- facebook sdk -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -53,6 +60,7 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="face" />
+
 
     </application>
 

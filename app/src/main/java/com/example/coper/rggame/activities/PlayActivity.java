@@ -1,13 +1,13 @@
 package com.example.coper.rggame.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DialogTitle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.ArraySet;
@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.coper.rggame.POJO.Difficulty;
 import com.example.coper.rggame.POJO.Riddle;
 import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.POJO.User;
@@ -46,6 +47,7 @@ public class PlayActivity extends AppCompatActivity {
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
+    private int num_errors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,6 @@ public class PlayActivity extends AppCompatActivity {
             final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
             if(currentRid != -1){
 
-                DialogTitle dt = new DialogTitle(this);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
                 // set title
@@ -84,13 +85,15 @@ public class PlayActivity extends AppCompatActivity {
                                 PlayActivity.this.currentRiddle = 0;
                                 PlayActivity.this.acumScore = 0;
                                 PlayActivity.this.bonusStreak = 0;
+                                PlayActivity.this.num_errors = 0;
 
                                 dialog.dismiss();
                             }
                         })
                         .setPositiveButton(R.string.continueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                PlayActivity.this.acumScore = currentRid;
+                                PlayActivity.this.num_errors = inGame_prefs.getInt("errors", 0);
+                                PlayActivity.this.acumScore = inGame_prefs.getInt("score", 0);
                                 PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",0);
                                 PlayActivity.this.currentRiddle = currentRid;
 
@@ -115,6 +118,7 @@ public class PlayActivity extends AppCompatActivity {
                 this.currentRiddle = 0;
                 this.acumScore = 0;
                 this.bonusStreak = 0;
+                this.num_errors = 0;
             }
 
         }else{
@@ -123,21 +127,20 @@ public class PlayActivity extends AppCompatActivity {
              * started and the user have changed the focus on the app or the orientation of the
              * screen.
              */
-            this.acumScore = savedInstanceState .getInt("score", 0);
-            this.bonusStreak = savedInstanceState.getInt("bonus", 0);
+            this.num_errors = savedInstanceState.getInt("errors");
+            this.acumScore = savedInstanceState .getInt("score");
+            this.bonusStreak = savedInstanceState.getInt("bonus");
             // Problem detected: NO GOOD RECOVERY OF THE INDEXES ARRAY
             int []recovered = savedInstanceState.getIntArray("prev_indexes");
-            this.currentRiddle = savedInstanceState.getInt("currentRiddle", 0);
+            this.currentRiddle = savedInstanceState.getInt("currentRiddle");
 
             if(recovered != null) {
-                this.indexes = recovered.clone();
-                /*
                 int position = 0;
                 for (int index : recovered) {
                     this.indexes[position] = index;
                     position++;
                 }
-                */
+
             }
         }
 
@@ -151,6 +154,7 @@ public class PlayActivity extends AppCompatActivity {
         Bundle tempSave = new Bundle();
 
         tempSave.putInt("score", this.acumScore);
+        tempSave.putInt("errors", this.num_errors);
         tempSave.putInt("bonus", this.bonusStreak);
         tempSave.putIntArray("prev_indexes", this.indexes);
         tempSave.putInt("current", this.currentRiddle);
@@ -163,6 +167,7 @@ public class PlayActivity extends AppCompatActivity {
             prev_indexes.add(Integer.toString(this.indexes[i]));
 
         prefsEditor.putInt("score", this.acumScore);
+        prefsEditor.putInt("errors", this.num_errors);
         prefsEditor.putInt("bonusStreak", this.bonusStreak);
         prefsEditor.putStringSet("prev_indexes", prev_indexes);
         prefsEditor.putInt("currentRiddle", this.currentRiddle);
@@ -289,7 +294,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private boolean indexContained(int currentPos, int candidateIndex){
-        for(int i = 0; i <= currentPos; i++)
+        for(int i = 0; i < currentPos; i++)
             if(this.indexes[i] == candidateIndex)
                 return true;
 
@@ -306,16 +311,28 @@ public class PlayActivity extends AppCompatActivity {
         if(answerField!=null)
             proposedAnswer = answerField.getText().toString();
 
-        return (realAnswer.compareToIgnoreCase(proposedAnswer) == 0);
+        if(realAnswer.compareToIgnoreCase(proposedAnswer) == 0)
+            return true;
+        else{
+
+
+            return false;
+        }
     }
 
     private void loadNextRiddle(){
 
         if (this.currentRiddle < this.RIDDLES_PER_GAME)
             this.drawScreen();
-        else
-            endGame();
+        else {
+            SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
+            SharedPreferences.Editor edit = inGame_prefs.edit();
 
+            edit.putBoolean("winResult", true);
+            edit.apply();
+
+            this.endGame();
+        }
     }
 
     private void endGame() {
@@ -327,7 +344,13 @@ public class PlayActivity extends AppCompatActivity {
         SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
         SharedPreferences.Editor edit = inGame_prefs.edit();
 
+        edit.putInt("score", this.acumScore);
+        edit.apply();
+
+        this.finish();
+        /*
         edit.remove("current_riddle");
+        edit.putInt("score", this.acumScore);
         edit.apply();
 
         SharedPreferences game_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
@@ -344,7 +367,7 @@ public class PlayActivity extends AppCompatActivity {
         recording.setProfilePic(BitmapFactory.decodeResource( getApplicationContext().getResources(),
                                                               imageId ));
 
-        database.insert( recording, this.acumScore );
+        database.insert( recording, this.acumScore );*/
     }
 
     public void onClickSolveButton(View v) {
@@ -363,8 +386,24 @@ public class PlayActivity extends AppCompatActivity {
             this.loadNextRiddle();
 
         } else if(etAnswer!=null) {
-            this.bonusStreak = 0;
-            etAnswer.setError("So... You are not as brilliant as you thought, huh?");
+            SharedPreferences prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
+            int selectedDifficultyOrdinal = prefs.getInt("difficulty", Difficulty.Medium.ordinal());
+            Difficulty selectedDifficulty = Difficulty.values()[selectedDifficultyOrdinal];
+
+            this.num_errors++;
+
+            if (this.num_errors >= selectedDifficulty.getNumCalls()){
+                SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
+                SharedPreferences.Editor edit = inGame_prefs.edit();
+
+                edit.putBoolean("winResult", false);
+                edit.apply();
+
+                this.endGame();
+            }else {
+                this.bonusStreak = 0;
+                etAnswer.setError(getResources().getString(R.string.wrongAnswer));
+            }
         }
     }
 }

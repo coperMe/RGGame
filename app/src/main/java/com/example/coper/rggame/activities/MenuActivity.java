@@ -17,8 +17,14 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            Intent intent = new Intent(this, SummaryActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void onClickMenuButton(View v){
@@ -27,17 +33,16 @@ public class MenuActivity extends AppCompatActivity {
         switch(v.getId()){
             case R.id.playButton:
                 intention = new Intent(this, PlayActivity.class);
-                intention.putExtra("continue",true);
+                startActivityForResult(intention, 0);
                 break;
             case R.id.scoresButton:
                 intention = new Intent(this, ScoresActivity.class);
+                startActivityForResult(intention, -1);
             break;
             case R.id.settingsButton:
                 intention = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intention, -2);
             break;
         }
-
-        startActivity(intention);
     }
-
 }
