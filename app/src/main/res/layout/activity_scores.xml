@@ -17,7 +17,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </TabWidget>
-            <android.support.v7.widget.ContentFrameLayout
+            <android.support.v7.internal.widget.ContentFrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -43,8 +43,8 @@
                     android:layout_height="match_parent"
                     android:id="@+id/rvFriendsScores">
                 </android.support.v7.widget.RecyclerView>
-            </android.support.v7.widget.ContentFrameLayout>
+            </android.support.v7.internal.widget.ContentFrameLayout>
 
-        </android.support.v7.widget.LinearLayoutCompat>
+        </LinearLayout>
     </TabHost>
 </RelativeLayout>

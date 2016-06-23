@@ -18,9 +18,9 @@ public class EndGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game);
 
-        this.saveData();
-
         this.drawScreen();
+
+        this.saveData();
     }
 
     private void saveData(){

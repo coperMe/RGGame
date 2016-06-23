@@ -38,11 +38,12 @@ public class ScoresActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_scores);
 
         // We ask for an indeterminate progress bar
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        this.setProgressBarIndeterminate(true);
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        //this.setProgressBarIndeterminate(true);
 
         if(savedInstanceState == null) {
             tabs = (TabHost) findViewById(R.id.tabHost);
@@ -76,22 +77,6 @@ public class ScoresActivity extends AppCompatActivity {
         db.close();
 
         return local;
-    }
-
-    private boolean checkConnection(){
-        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (manager != null){
-            NetworkInfo info = manager.getActiveNetworkInfo();
-
-            if (info.isAvailable() && info.isConnected())
-                return true;
-            else
-                return false;
-        }else{
-            return false;
-        }
     }
 
     private Vector<Scoring> getRemoteData(){
@@ -128,4 +113,22 @@ public class ScoresActivity extends AppCompatActivity {
 
         return data;
     }
+
+    private boolean checkConnection(){
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (manager != null){
+            NetworkInfo info = manager.getActiveNetworkInfo();
+
+            if (info.isAvailable() && info.isConnected())
+                return true;
+            else
+                return false;
+        }else{
+            return false;
+        }
+    }
+
+
 }
