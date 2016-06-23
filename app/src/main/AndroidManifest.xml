@@ -32,9 +32,6 @@
             android:name=".activities.PlayActivity"
             android:parentActivityName=".activities.MenuActivity" />
         <activity
-            android:name=".activities.SummaryActivity"
-            android:parentActivityName=".activities.MenuActivity" />
-        <activity
             android:name=".activities.ScoresActivity"
             android:parentActivityName=".activities.MenuActivity" />
         <activity

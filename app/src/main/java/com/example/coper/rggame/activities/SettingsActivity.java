@@ -1,40 +1,21 @@
 package com.example.coper.rggame.activities;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.example.coper.rggame.POJO.Difficulty;
 import com.example.coper.rggame.POJO.Scoring;
-import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.RecAdapter;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Vector;
-//facebook button
-import com.facebook.FacebookSdk;
 
 /**
  * @author David García Molino
@@ -42,152 +23,74 @@ import com.facebook.FacebookSdk;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private RecyclerView recView;
-    private int imageId;
+  private RecyclerView recView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_settings);
 
-        //initialize facebook sdk
-        //FacebookSdk.sdkInitialize(getApplicationContext());
+    recView = (RecyclerView) findViewById(R.id.rvFriendsList);
 
-        setContentView(R.layout.activity_settings);
+    Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
 
-        recView = (RecyclerView) findViewById(R.id.rvFriendsList);
+    if(savedInstanceState == null){
+      if(difficulty != null)
+        difficulty.setSelection(Difficulty.Medium.ordinal());
 
-        EditText name = (EditText) findViewById(R.id.etName);
-        ImageView profileImage = (ImageView) findViewById(R.id.ivUserImage);
-        Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
-        Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
+      recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
+      recView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(savedInstanceState == null){
-            Bitmap image;
-            SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
+    } else {
+      EditText name = (EditText) findViewById(R.id.etName);
 
-            if(difficulty != null && name != null && sex != null && profileImage != null) {
-                name.setText(preferences.getString("name",""));
-                difficulty.setSelection(preferences.getInt("difficulty", Difficulty.Medium.ordinal()));
-                sex.setSelection(preferences.getInt("sex", 0));
-
-                if(sex.getSelectedItemPosition() == Sex.Woman.ordinal()) {
-                    this.imageId = R.drawable.ui_default_batgirl;
-                    image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
-                                                          this.imageId );
-                }else {
-                    this.imageId = R.drawable.ui_default_batman;
-                    image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
-                                                          this.imageId);
-                }
-
-                profileImage.setImageBitmap(image);
-            }
-
-
-            recView.setAdapter(new RecAdapter(this, new Vector<Scoring>()));
-            recView.setLayoutManager(new LinearLayoutManager(this));
-        } else {
-            if(name != null && difficulty != null && sex != null && profileImage != null) {
-                this.imageId = savedInstanceState.getInt("profileImage");
-                Bitmap image = BitmapFactory.decodeResource( getApplicationContext().getResources(),
-                                                             this.imageId );
-
-                profileImage.setImageBitmap(image);
-                name.setText(savedInstanceState.getString("name"));
-                sex.setSelection(savedInstanceState.getInt("sex"));
-                difficulty.setSelection(savedInstanceState.getInt("difficulty"));
-            }
-        }
+      if(name != null && difficulty != null) {
+        name.setText(savedInstanceState.getString("name"));
+        difficulty.setSelection(savedInstanceState.getInt("difficulty"));
+      }
     }
+  }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+  @Override
+  protected void onPause() {
+    super.onPause();
 
-        EditText name = (EditText) findViewById(R.id.etName);
-        Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
-        Spinner sex = (Spinner) findViewById(R.id.sSexSpinner);
-        ImageView profile = (ImageView) findViewById(R.id.ivUserImage);
-        Bundle tempSave = new Bundle();
+    EditText name = (EditText) findViewById(R.id.etName);
+    Spinner difficulty = (Spinner) findViewById(R.id.sDifficultySpinner);
+    Bundle tempSave = new Bundle();
 
-        if(name != null && difficulty != null && sex != null) {
-            tempSave.putString("name", name.getText().toString());
-            tempSave.putInt("difficulty", difficulty.getSelectedItemPosition());
-            tempSave.putInt("sex", sex.getSelectedItemPosition());
-            tempSave.putInt("profileImage", this.imageId);
-        }
-
-        SharedPreferences preferences = getSharedPreferences("user_preferences",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        if(name != null && sex != null && difficulty != null && profile != null) {
-            editor.putString("userName", name.getText().toString());
-            editor.putInt("sex", sex.getSelectedItemPosition());
-            editor.putInt("difficulty", difficulty.getSelectedItemPosition());
-            editor.putInt("profileImage", this.imageId);
-        }
-
-        editor.apply();
+    if(name != null && difficulty != null) {
+      tempSave.putString("name", name.getText().toString());
+      tempSave.putInt("difficulty", difficulty.getSelectedItemPosition());
     }
+  }
 
-    public void onClickAddFriendButton(View v){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+  public void onClickAddFriendButton(View v){
 
-        // set title
-        alertDialogBuilder.setTitle("Add a friend");
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        // set dialog message
-        alertDialogBuilder
-                .setMessage("Select how you want to add a friend")
-                .setCancelable(true)
-                .setNegativeButton("Facebook",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ///TODO
+    // set title
+    alertDialogBuilder.setTitle("Add a friend");
 
-                    }
-                })
-                .setPositiveButton("Proximity",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        ///TODO
+    // set dialog message
+    alertDialogBuilder
+            .setMessage("Select how you want to add a friend")
+            .setCancelable(true)
+            .setNegativeButton("Facebook",new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                ///TODO
+              }
+            })
+            .setPositiveButton("Proximity",new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog,int id) {
+                ///TODO
+              }
+            });
 
-                    }
-                });
+    // create alert dialog
+    AlertDialog alertDialog = alertDialogBuilder.create();
 
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-    }
-
-    private void addFriendInServer (String friendName) throws IOException {
-        SharedPreferences prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http");
-        builder.authority("wwtbamandroid.appspot.com");
-        builder.appendPath("rest/highscores");
-
-        URL destination = null;
-        try {
-            destination = new URL(builder.build().toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        String coding = "UTF-8";
-
-        String params =
-                URLEncoder.encode("name", coding) + "=" +
-                URLEncoder.encode(prefs.getString("name", ""), coding) + "&" +
-                URLEncoder.encode("friend_name", coding) + "=" +
-                URLEncoder.encode(friendName,coding);
-        OutputStream stream = connection.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, "UTF-8"));
-        writer.write(params);
-        writer.flush();
-        writer.close();
-        stream.close();
-    }
+    // show it
+    alertDialog.show();
+  }
 }
