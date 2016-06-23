@@ -7,17 +7,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/riddler_summary_landscape"
-    tools:context=".activities.SummaryActivity">
-
+    tools:context=".activities.EndGameActivity">
+    <!--android:background="@drawable/riddler_summary_landscape"-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=" "
-        android:id="@+id/tvCongratsTitle"
-        android:textColor="@color/riddlerPurple"
+        android:text="Large Text"
+        android:id="@+id/tvWinOrDie"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -25,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text=" "
-        android:id="@+id/tvCongratsMessage"
-        android:textColor="@color/riddlerPurple"
+        android:text="Medium Text"
+        android:id="@+id/tvWinOrDieMessage"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -10,7 +10,7 @@
     android:background="@drawable/questionmark_landscape"
     tools:context=".activities.PlayActivity">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etAnswer"
@@ -39,7 +39,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"

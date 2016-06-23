@@ -10,20 +10,13 @@ import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.POJO.User;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.MyOpenHelper;
-import com.facebook.FacebookActivity;
-import com.facebook.FacebookSdk;
 
-import org.w3c.dom.Text;
-
-public class SummaryActivity extends AppCompatActivity {
+public class EndGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_summary);
-
-        //initialize facebook sdk
-        //FacebookSdk.sdkInitialize(getBaseContext());
+        setContentView(R.layout.activity_end_game);
 
         this.saveData();
 
@@ -56,8 +49,8 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void drawScreen(){
         SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
-        TextView congratsTitle = (TextView) findViewById(R.id.tvCongratsTitle);
-        TextView congratsMessage = (TextView) findViewById(R.id.tvCongratsMessage);
+        TextView congratsTitle = (TextView) findViewById(R.id.tvWinOrDie);
+        TextView congratsMessage = (TextView) findViewById(R.id.tvWinOrDieMessage);
 
         if (congratsTitle != null && congratsMessage != null)
             if (inGame_prefs.getBoolean("winResult", true)){

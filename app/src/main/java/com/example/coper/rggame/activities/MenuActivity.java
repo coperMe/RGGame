@@ -24,7 +24,8 @@ public class MenuActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
-                Intent intent = new Intent(this, SummaryActivity.class);
+                //Intent intent = new Intent(this, SummaryActivity.class);
+                Intent intent = new Intent(this, EndGameActivity.class);
                 startActivity(intent);
             }
         }

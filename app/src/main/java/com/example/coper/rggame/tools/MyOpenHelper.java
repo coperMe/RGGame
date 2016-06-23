@@ -57,15 +57,14 @@ public class MyOpenHelper extends SQLiteOpenHelper {
          * database. In this case, we put this new user in the database and then, we recover the
          * userId and we insert the score.
          */
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         SQLiteDatabase database = getWritableDatabase();
 
         user.getProfilePic().compress(Bitmap.CompressFormat.PNG, 0, stream);
 
         Cursor directInsertion = database.rawQuery("SELECT userId " +
-                "FROM Users " +
-                "WHERE name = '" + user.getName() + "'", null);
+                                                   "FROM Users " +
+                                                   "WHERE name = '" + user.getName() + "'", null);
         if(directInsertion.moveToFirst())
             database.execSQL("INSERT INTO Scores " +
                              "VALUES ( null, " +
@@ -83,7 +82,7 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
             Cursor indirectInsertion = database.rawQuery( "SELECT userId " +
                                                           "FROM Users " +
-                                                          "WHERE name = '" + user.getName()+"'", null );
+                                                          "WHERE name = '" + user.getName() + "'", null );
 
             String sqlScores = "INSERT INTO Scores (userId, score) VALUES(?,?)";
             SQLiteStatement insertScores = database.compileStatement(sqlScores);
@@ -91,12 +90,7 @@ public class MyOpenHelper extends SQLiteOpenHelper {
             insertScores.bindLong(1, indirectInsertion.getInt(0));
             insertScores.bindLong(2, score);
             insertScores.executeInsert();
-            /*
-            database.execSQL( "INSERT INTO Scores " +
-                    "VALUES ( null, '" +
-                              indirectInsertion.getInt(0) + "', " +
-                              score + ")" );
-            */
+
             indirectInsertion.close();
         }
 

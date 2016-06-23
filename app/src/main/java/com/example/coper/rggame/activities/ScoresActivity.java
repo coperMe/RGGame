@@ -38,22 +38,17 @@ public class ScoresActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_scores);
 
         // We ask for an indeterminate progress bar
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-        setContentView(R.layout.activity_scores);
-
         this.setProgressBarIndeterminate(true);
 
         if(savedInstanceState == null) {
             tabs = (TabHost) findViewById(R.id.tabHost);
 
-            MyOpenHelper db = new MyOpenHelper(this);
-            Vector<Scoring> data = db.extractAll();
-            db.close();
-
-            Vector<Scoring> friendsData = this.getFriendssHighscores();
+            Vector<Scoring> data = this.getLocalData();
+            Vector<Scoring> friendsData = this.getRemoteData();
 
             if (tabs != null) {
                 tabs.setup();
@@ -74,6 +69,15 @@ public class ScoresActivity extends AppCompatActivity {
         }
     }
 
+    private Vector<Scoring> getLocalData(){
+
+        MyOpenHelper db = new MyOpenHelper(this);
+        Vector<Scoring> local = db.extractAll();
+        db.close();
+
+        return local;
+    }
+
     private boolean checkConnection(){
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -90,7 +94,7 @@ public class ScoresActivity extends AppCompatActivity {
         }
     }
 
-    private Vector<Scoring> getFriendssHighscores(){
+    private Vector<Scoring> getRemoteData(){
         Vector<Scoring> data = new Vector<Scoring>();
 
         SharedPreferences user_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
@@ -104,25 +108,20 @@ public class ScoresActivity extends AppCompatActivity {
         /////////////
         RecyclerView friendList_rc = (RecyclerView) findViewById(R.id.rvFriendsList);
 
-        URL destination = null;
+        URL destination;
         try {
             destination = new URL(builder.build().toString());
+
+            HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
+            connection.setRequestMethod("GET");
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            int status = connection.getResponseCode();
+            if (status != -1){
+
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
-
-        try {
-            if (destination != null) {
-                HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
-                connection.setRequestMethod("GET");
-
-                InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-                int status = connection.getResponseCode();
-                if (status != -1){
-
-                }
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

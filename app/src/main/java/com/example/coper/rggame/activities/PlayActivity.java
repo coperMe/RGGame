@@ -33,7 +33,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final int RIDDLES_PER_GAME = 10;
+    private final int RIDDLES_PER_GAME = 1;
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
