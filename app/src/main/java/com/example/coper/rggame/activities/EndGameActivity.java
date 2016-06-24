@@ -1,7 +1,9 @@
 package com.example.coper.rggame.activities;
 
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -34,17 +36,19 @@ public class EndGameActivity extends AppCompatActivity {
         MyOpenHelper database = new MyOpenHelper(this);
 
         User recording = new User();
-        int imageId;
+        Bitmap imagen;
+
         if (game_prefs.getInt("sex", 0) == Sex.Woman.ordinal())
-            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batgirl);
+            imagen = ((BitmapDrawable) ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.ui_default_batgirl, null)).getBitmap();
         else
-            imageId = game_prefs.getInt("profileImage", R.drawable.ui_default_batman);
+            imagen = ((BitmapDrawable) ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.ui_default_batman, null)).getBitmap();
 
         recording.setName(game_prefs.getString("userName", game_prefs.getString("name", "")));
-        recording.setProfilePic(BitmapFactory.decodeResource( getApplicationContext().getResources(),
-                imageId ));
+        recording.setProfilePic(imagen);
 
-        database.insert(recording, game_prefs.getInt("score", 0));
+        database.insert(recording, inGame_prefs.getInt("score", 0));
     }
 
     private void drawScreen(){
