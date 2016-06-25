@@ -46,8 +46,6 @@ public class RetrieveInfo extends AsyncTask<String, Integer, Vector<Scoring>> {
 
         Vector<Scoring> data = new Vector<Scoring>();
         try {
-            //should be 1 only
-
 
             HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
             connection.setRequestMethod("GET");
