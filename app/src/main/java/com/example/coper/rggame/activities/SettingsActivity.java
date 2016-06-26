@@ -1,6 +1,8 @@
 package com.example.coper.rggame.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 //facebook button
-import com.facebook.FacebookSdk;
+
 
 /**
  * @author David García Molino
@@ -40,6 +42,7 @@ import com.facebook.FacebookSdk;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private Context context = this;
   private RecyclerView recView;
   private int imageId;
 
@@ -157,9 +160,10 @@ public class SettingsActivity extends AppCompatActivity {
 
               }
             })
-            .setPositiveButton("Proximity",new DialogInterface.OnClickListener() {
+            .setPositiveButton("Username", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog,int id) {
-                ///TODO
+                  Intent intent = new Intent(context, AddFriendByNameActivity.class);
+                  startActivityForResult(intent, 0);
 
               }
             });
