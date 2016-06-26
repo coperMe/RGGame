@@ -73,16 +73,22 @@ public class MyOpenHelper extends SQLiteOpenHelper {
         else {
             directInsertion.close();
 
+            System.out.println("Nombre: " + user.getName());
+
             String sqlUsers = "INSERT INTO Users (profileImage, name) VALUES(?,?)";
             SQLiteStatement insertStmt = database.compileStatement(sqlUsers);
             insertStmt.clearBindings();
             insertStmt.bindBlob(1, stream.toByteArray());
-            insertStmt.bindString(2, user.getName());
+            insertStmt.bindString(2, "" + user.getName() + "");
             insertStmt.executeInsert();
+
+            database.close();
+            database = getWritableDatabase();
 
             Cursor indirectInsertion = database.rawQuery( "SELECT userId " +
                                                           "FROM Users " +
                                                           "WHERE name = '" + user.getName() + "'", null );
+            indirectInsertion.moveToFirst();
 
             String sqlScores = "INSERT INTO Scores (userId, score) VALUES(?,?)";
             SQLiteStatement insertScores = database.compileStatement(sqlScores);

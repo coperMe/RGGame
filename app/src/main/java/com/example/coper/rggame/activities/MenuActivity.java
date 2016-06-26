@@ -40,11 +40,11 @@ public class MenuActivity extends AppCompatActivity {
                 break;
             case R.id.scoresButton:
                 intention = new Intent(this, ScoresActivity.class);
-                startActivityForResult(intention, -1);
+                startActivityForResult(intention, 1);
             break;
             case R.id.settingsButton:
                 intention = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intention, -2);
+                startActivityForResult(intention, 2);
             break;
         }
     }

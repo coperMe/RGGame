@@ -338,7 +338,6 @@ public class PlayActivity extends AppCompatActivity {
 
         edit.putInt("score", this.acumScore);
         edit.apply();
-
         setResult(Activity.RESULT_OK);
 
         this.finish();

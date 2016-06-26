@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.coper.rggame.POJO.Scoring;
 import com.example.coper.rggame.POJO.Sex;
 import com.example.coper.rggame.POJO.User;
 import com.example.coper.rggame.R;
 import com.example.coper.rggame.tools.MyOpenHelper;
+import com.example.coper.rggame.tools.PutScore;
 
 public class EndGameActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class EndGameActivity extends AppCompatActivity {
         SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
         SharedPreferences.Editor edit = inGame_prefs.edit();
 
-        edit.remove("current_riddle");
+        edit.remove("currentRiddle");
         edit.apply();
 
         SharedPreferences game_prefs = getSharedPreferences("user_preferences", MODE_PRIVATE);
@@ -49,6 +51,13 @@ public class EndGameActivity extends AppCompatActivity {
         recording.setProfilePic(imagen);
 
         database.insert(recording, inGame_prefs.getInt("score", 0));
+
+        //send score to server
+        new PutScore().execute(new Scoring(recording, inGame_prefs.getInt("score", 0)));
+        //delete shared preferences
+        inGame_prefs.edit().clear();
+        inGame_prefs.edit().commit();
+
     }
 
     private void drawScreen(){
