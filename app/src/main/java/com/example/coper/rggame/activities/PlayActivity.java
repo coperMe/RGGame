@@ -34,7 +34,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final int RIDDLES_PER_GAME = 1;
+    private final int RIDDLES_PER_GAME = 3;
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
@@ -120,10 +120,12 @@ public class PlayActivity extends AppCompatActivity {
              * started and the user have changed the focus on the app or the orientation of the
              * screen.
              */
+
+
             this.num_errors = savedInstanceState.getInt("errors");
             this.acumScore = savedInstanceState .getInt("score");
             this.bonusStreak = savedInstanceState.getInt("bonus");
-            // Problem detected: NO GOOD RECOVERY OF THE INDEXES ARRAY
+
             int []recovered = savedInstanceState.getIntArray("prev_indexes");
             this.currentRiddle = savedInstanceState.getInt("currentRiddle");
 
@@ -145,14 +147,6 @@ public class PlayActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        Bundle tempSave = new Bundle();
-
-        tempSave.putInt("score", this.acumScore);
-        tempSave.putInt("errors", this.num_errors);
-        tempSave.putInt("bonus", this.bonusStreak);
-        tempSave.putIntArray("prev_indexes", this.indexes);
-        tempSave.putInt("current", this.currentRiddle);
-
         SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = inGame_prefs.edit();
 
@@ -169,6 +163,17 @@ public class PlayActivity extends AppCompatActivity {
         prefsEditor.apply();
 
         setResult(Activity.RESULT_CANCELED);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("score", this.acumScore);
+        savedInstanceState.putInt("errors", this.num_errors);
+        savedInstanceState.putInt("bonus", this.bonusStreak);
+        savedInstanceState.putIntArray("prev_indexes", this.indexes);
+        savedInstanceState.putInt("current", this.currentRiddle);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private void playGame() {
