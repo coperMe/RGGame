@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -34,7 +36,7 @@ import java.util.Vector;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private final int RIDDLES_PER_GAME = 3;
+    private final int RIDDLES_PER_GAME = 10;
     private Vector<Riddle> riddleList = null;
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
@@ -128,7 +130,7 @@ public class PlayActivity extends AppCompatActivity {
 
             int []recovered = savedInstanceState.getIntArray("prev_indexes");
             this.currentRiddle = savedInstanceState.getInt("currentRiddle");
-
+            System.out.println(currentRiddle);
             if(recovered != null) {
                 int position = 0;
                 for (int index : recovered) {
@@ -139,7 +141,9 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
-
+        for (int ind : indexes) {
+            System.out.println(ind);
+        }
         this.playGame();
     }
 
@@ -171,8 +175,8 @@ public class PlayActivity extends AppCompatActivity {
         savedInstanceState.putInt("errors", this.num_errors);
         savedInstanceState.putInt("bonus", this.bonusStreak);
         savedInstanceState.putIntArray("prev_indexes", this.indexes);
-        savedInstanceState.putInt("current", this.currentRiddle);
-
+        savedInstanceState.putInt("currentRiddle", this.currentRiddle);
+        System.out.println(this.currentRiddle);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -196,13 +200,18 @@ public class PlayActivity extends AppCompatActivity {
 
     private void initIndexes() {
         this.indexes = new int[RIDDLES_PER_GAME];
-
-        for(int i = 0; i < this.RIDDLES_PER_GAME; i++){
+        ArrayList<Integer> auxlist = new ArrayList<Integer>();
+        int i = 0;
+        while (i < RIDDLES_PER_GAME) {
             Random random = new Random();
             int randTaken = random.nextInt(this.riddleList.size());
-            if (!this.indexContained(i, randTaken)) {
+            if (!auxlist.contains(randTaken)) {
                 this.indexes[i] = randTaken;
+                i++;
             }
+        }
+        for (int j = 0; j < auxlist.size(); j++) {
+            this.indexes[j] = auxlist.get(j);
         }
     }
 
