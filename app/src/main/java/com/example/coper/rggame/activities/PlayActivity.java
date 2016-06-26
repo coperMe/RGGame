@@ -141,9 +141,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
-        for (int ind : indexes) {
-            System.out.println(ind);
-        }
         this.playGame();
     }
 
