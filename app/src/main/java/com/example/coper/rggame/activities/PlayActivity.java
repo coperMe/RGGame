@@ -1,6 +1,7 @@
 package com.example.coper.rggame.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class PlayActivity extends AppCompatActivity {
     private int [] indexes;
     private int currentRiddle, acumScore, bonusStreak;
     private int num_errors;
+    private PlayActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +48,17 @@ public class PlayActivity extends AppCompatActivity {
 
         View layout = findViewById(R.id.background);
         if(layout != null)
-                layout.getBackground().setAlpha(180);
+            layout.getBackground().setAlpha(180);
 
         this.setupAnswerField();
         this.fillRiddleVector();
         this.initIndexes();
 
+        context = this;
         if(savedInstanceState == null) {
-        /**
-         * This case contemplates the situation when the application has been just started.
-         */
+            /**
+             * This case contemplates the situation when the application has been just started.
+             */
 
             final SharedPreferences inGame_prefs = getSharedPreferences("ingame_preferences",MODE_PRIVATE);
             final int currentRid = inGame_prefs.getInt("currentRiddle",-1);
@@ -72,28 +75,28 @@ public class PlayActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setNegativeButton(R.string.notContinueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                PlayActivity.this.currentRiddle = 0;
-                                PlayActivity.this.acumScore = 0;
-                                PlayActivity.this.bonusStreak = 0;
-                                PlayActivity.this.num_errors = 0;
-
+                                context.currentRiddle = 0;
+                                context.acumScore = 0;
+                                context.bonusStreak = 0;
+                                context.num_errors = 0;
+                                context.drawScreen();
                                 dialog.dismiss();
                             }
                         })
                         .setPositiveButton(R.string.continueGame,new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                PlayActivity.this.num_errors = inGame_prefs.getInt("errors", 0);
-                                PlayActivity.this.acumScore = inGame_prefs.getInt("score", 0);
-                                PlayActivity.this.bonusStreak = inGame_prefs.getInt("bonusStreak",0);
-                                PlayActivity.this.currentRiddle = currentRid;
+                                context.num_errors = inGame_prefs.getInt("errors", 0);
+                                context.acumScore = inGame_prefs.getInt("score", 0);
+                                context.bonusStreak = inGame_prefs.getInt("bonusStreak", 0);
+                                context.currentRiddle = currentRid;
 
                                 Set<String> saved = inGame_prefs.getStringSet("prev_indexes", new HashSet<String>());
                                 int position = 0;
                                 for(String index : saved) {
-                                        PlayActivity.this.indexes[position] = Integer.valueOf(index);
-                                        position++;
+                                    context.indexes[position] = Integer.valueOf(index);
+                                    position++;
                                 }
-
+                                context.drawScreen();
                                 dialog.dismiss();
                             }
                         });
@@ -133,6 +136,7 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         }
+
 
         this.playGame();
     }
@@ -272,8 +276,8 @@ public class PlayActivity extends AppCompatActivity {
                         riddleLoader.getName().equals("riddle")){
                     this.riddleList.add(
                             new Riddle(riddleId,
-                                       riddleLoader.getAttributeValue(0),
-                                       riddleLoader.getAttributeValue(1)));
+                                    riddleLoader.getAttributeValue(0),
+                                    riddleLoader.getAttributeValue(1)));
                     riddleId++;
                 }
                 riddleLoader.next();
