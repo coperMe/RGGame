@@ -9,7 +9,24 @@
 
     <string name="tvName">Nombre:</string>
     <string name="etName">Introduce tu nombre aquí:</string>
+    <string name="tvHeroine">¿Que eres tu?</string>
     <string name="tvDifficulty">Dificultad:</string>
     <string name="tvFriendList">Lista de amigos:</string>
     <string name="bAddFriend">Añadir amigo</string>
+
+    <string name="continueGameTitle">Continuar partida</string>
+    <string name="continueGameMessage">Se ha detectado una partida previa. ¿Deseas continuar?</string>
+    <string name="continueGame">Sí</string>
+    <string name="notContinueGame">No</string>
+
+    <string name="wrongAnswer">Así que&#8230; No eres tan listo como creías, ¿eh?</string>
+
+    <string name="imageDescription">Este marco contiene la foto de perfil de usuario</string>
+    <string name="facebook_app_id">303033563372753</string>
+
+    <string name="congratsTitle">¡Enhorabuena, murcielaguito!</string>
+    <string name="congratsMessage">Me has derrotado esta vez, pero esto no será siempre así.</string>
+
+    <string name="failTitle">Más suerte la próxima vez, murcielaguito!</string>
+    <string name="failMessage">Has llegado hasta aquí&#8230; Estoy muy impresionado, no esperaba menos de ti. Ni más, tampoco.</string>
 </resources>

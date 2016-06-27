@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="spinnerArray">
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
-        <item>Riddle Expert</item>
+    <string-array name="spinnerDifficulty">
+        <item>Fácil</item>
+        <item>Medio</item>
+        <item>Difícil</item>
+        <item>Experto en enigmas</item>
+    </string-array>
+
+    <string-array name="spinnerSex">
+        <item>Heroína</item>
+        <item>Héroe</item>
     </string-array>
 
 </resources>

@@ -1,7 +1,7 @@
 package com.example.coper.rggame.tools;
 
-import android.net.Uri;
-import android.support.v7.widget.AppCompatImageView;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,13 +15,13 @@ import com.example.coper.rggame.R;
 
 public class UserHolder extends RecyclerView.ViewHolder {
 
-    private AppCompatImageView profilePic;
+    private ImageView profilePic;
     private TextView name, points;
 
     public UserHolder(View itemView) {
         super(itemView);
 
-        profilePic = (AppCompatImageView) itemView.findViewById(R.id.profileImage);
+        profilePic = (ImageView) itemView.findViewById(R.id.profileImage);
         name = (TextView) itemView.findViewById(R.id.tvScoreName);
         points = (TextView) itemView.findViewById(R.id.tvScorePoints);
     }
@@ -30,8 +30,8 @@ public class UserHolder extends RecyclerView.ViewHolder {
         return profilePic;
     }
 
-    public void setProfilePic(Uri profilePic) {
-        this.profilePic.setImageURI(profilePic);
+    public void setProfilePic(Bitmap profilePic) {
+        this.profilePic.setImageBitmap(profilePic);
     }
 
     public TextView getName() {

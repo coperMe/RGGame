@@ -29,7 +29,7 @@ public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
     @Override
     public UserHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = inflater.inflate(R.layout.score_row, parent);
+        View v = inflater.inflate(R.layout.score_row, parent, false);
         return new UserHolder(v);
 
     }
@@ -48,6 +48,10 @@ public class RecAdapter extends RecyclerView.Adapter<UserHolder> {
 
         return highScores.size();
 
+    }
+
+    public String getItem (int id){
+        return highScores.elementAt(id).getUser().getName();
     }
 
 }
